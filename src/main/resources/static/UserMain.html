@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="Styles/admin-all.css" />
+    <link rel="stylesheet" type="text/css" href="Styles/base.css" />
+    <link rel="stylesheet" type="text/css" href="Styles/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
+    <script type="text/javascript" src="Scripts/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="Scripts/jquery-ui-1.8.22.custom.min.js"></script>
+    <script type="text/javascript" src="Scripts/index.js"></script>
+    
+    <meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+</head>
+<body>
+    <div class="warp">
+		<h1 style="text-align:center;">保险业务管理系统</h1>
+        <div class="left_c left">
+            <!-- UserExit!userLogout -->
+            <h1 align="center">欢迎您！&nbsp;&nbsp;&nbsp;&nbsp;<a href="Login.html" dir="rtl" style="font-size: 10px;" >退出</a></h1>
+            <div class="acc">
+                <div>
+                    <a class="one">保险信息</a>
+                    <ul class="kid">                                       
+                                                                         
+                        <li><b class="tip"></b><a target="Conframe" href="UserPage/SelProductList.html">保险列表</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <a class="one">订单信息</a>
+                    <ul class="kid">
+                        <!-- SelOrderListByMe!selOrderListByMe -->
+                        <li><b class="tip"></b><a target="Conframe" href="UserPage/SelOrderList.html">个人订单列表</a></li>
+                    </ul>
+                </div><div>
+                    <a class="one">赔偿信息</a>
+                    <ul class="kid">
+                        <li><b class="tip"></b><a target="Conframe" href="UserPage/SelCompensateList.html">个人申请赔偿列表</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <a class="one">个人信息管理</a>
+                    <!-- SelUserByMe!selUserByMe -->
+                    <ul class="kid">
+                        <li><b class="tip"></b><a target="Conframe" href="UserPage/SelUser.html">修改个人信息</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    
+        <div class="right_c">
+            <div class="nav-tip" onclick="javascript:void(0)">&nbsp;</div>
+
+        </div>
+        <div class="Conframe">
+        	<!-- <iframe name="Conframe" id="Conframe" src="SelProductListByMe!selProductList"></iframe> -->
+            <iframe name="Conframe" id="Conframe" src="UserPage/SelProductList.html"></iframe>
+        </div>
+ 
+        <div class="bottom_c">保险业务管理系统</div>
+    
+	</div>
+</body>
+</html>
