@@ -20,6 +20,6 @@ public class TAdminController {
     @RequestMapping("/select")
     public void selectAllTUser() {
         List<TAdmin> tAdmins = tAdminService.selectAll();
-
+        //aaa
     }
 }
