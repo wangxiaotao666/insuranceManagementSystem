@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @MapperScan("cn.lanqiao.insurancemanagementsystem.mapper")
 public class InsuranceManagementSystemApplication {
-
+//11
     public static void main(String[] args) {
         SpringApplication.run(InsuranceManagementSystemApplication.class, args);
     }
