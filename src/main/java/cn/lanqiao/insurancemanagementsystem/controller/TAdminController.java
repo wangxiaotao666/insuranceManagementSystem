@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/tAdmin")
 public class TAdminController {
 //    依赖注入
+//sdakd
     @Autowired
     private TAdminService tAdminService;
     @RequestMapping("/select")
