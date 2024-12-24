@@ -42,7 +42,6 @@ public class TAdminController {
     @RequestMapping("/deletePList")
     public ResponseUtils deletePList(@RequestBody ProductList plt){
         Integer product_id = plt.getProduct_id();
-        System.out.println(product_id);
         try {
             int result = tAdminService.deletePList(product_id);
             if(result==1){
