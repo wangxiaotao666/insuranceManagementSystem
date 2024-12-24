@@ -1,11 +1,8 @@
-
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title></title>
+    <title>保险管理</title>
 
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="cache-control" content="no-cache">
@@ -21,49 +18,26 @@
     <link rel="stylesheet" type="text/css" href="/Styles/formui.css"/>
     <script type="text/javascript" src="/Scripts/tb.js"></script>
     <script type="text/javascript" src="/laydate/laydate.js"></script>
-
-
+    <script src="../js/axios.min.js"></script>
 </head>
 
 <body>
 <form action="AddProduct.html" method="post" name="myForm">
     <div class="alert alert-info" style="width:100%;">当前位置<b class="tip"></b>保险列表</div>
-    <!--		<input type="submit" class="btn btn-mini btn-danger" value="新增保险" style="height:30px;font-size: 15px"/><br/><br/>-->
-    <a href="/AdminPage/AddProduct.html"  class="btn btn-mini btn-danger" style="color:white" >新增保险</a><br/><br/>
+    <a href="/AdminPage/AddProduct.html" class="btn btn-mini btn-danger" style="color:white">新增保险</a><br/><br/>
 </form>
-<table class="tb" id="list">
-    <tbody>
-    <tr style="align-content: center">
-        <th>保险名称</th>
-        <th>保险费用</th>
-        <th>发布时间</th>
-        <th>保险内容</th>
-        <th>操作</th>
-    </tr>
-    <tbody id="adminTable">
+
+<table class="tbform list">
+    <tbody id="productTableBody">
     <!-- 用户数据将会在这里动态加载 -->
     </tbody>
-
-    <tr class="demo">
-        <td style="width:600px;height:60px">
-            <!-- <%=ol.getOrder_name() %> -->
-        </td>
-        <td style="width:600px;height:60px">
-            <!-- <%=ol.getOrder_cost() %> -->
-        </td>
-        <td style="width:600px;height:60px">
-            <!-- <%=ol.getOrder_time() %> -->
-        </td>
-        <td style="width:55%;height:60px">
-            <!-- <%=ol.getOrder_uname() %> -->
-        </td>
-        <td style="width:20%;height:60px">
-            <!-- <%=ol.getOrder_uname() %> -->
-        </td>
-    </tr>
-
-    </tbody>
 </table>
+<br/>
+
+<!-- 示例静态内容保持不变 -->
+<table class="tbform list">
+</table>
+<br/>
 </body>
 </html>
 <!--第一步：前端发送请求应该使用什么技术 axios(AJAX)-->
@@ -71,17 +45,90 @@
 
 <!--第二步:通过axios发送前端请求到服务器(后端)-->
 <script>
-    axios({
-        url:"http://localhost:8080/tAdmin/select",
-        method: "post"
-    }).then((response)=>{
-        if(response.data.data && response.data.data.length>0){
-            const data = response.data.data;
-            const tableBody = document.querySelector('#adminTable');
-        //     清空现有的表格内容
-            tableBody.innerHTML= '';
+    document.addEventListener('DOMContentLoaded', function() {
+        axios({
+            url: "http://localhost:8080/tAdmin/selectPList",
+            method: "get", // 使用 GET 方法获取数据
+        }).then((response) => {
+            if (response.data.code === 200) {
+                const productList = response.data.data || [];
+                const productTableBody = document.getElementById('productTableBody');
+                productTableBody.innerHTML = ''; // 清空现有的内容
 
-        }
-    })
+                productList.forEach(product => {
+                    const productTemplate = `
+                    <tr>
+                        <td class="product_name">保险名称：${product.product_name}</td>
+                        <td class="product_cost">保险费用：${product.product_cost}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="product_time">发布时间：${product.product_time}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="product_desc">保险内容：</td>
+                    </tr>
+                    <tr>
+                        <textarea disabled style="width:178%;height:111px;padding-left:10px;word-break:break-all;" class="product_desc">${product.product_desc}</textarea>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button class="delete-btn" data-id="${product.id}" style="color: white" class="btn btn-mini btn-danger">删除</button>
+                        </td>
+                        <br />
+                    </tr>
+                `;
+                    productTableBody.insertAdjacentHTML('beforeend', productTemplate);
+                });
+
+                console.log("查询成功");
+                alert("查询成功");
+
+                // 使用事件委托来处理动态添加的按钮
+                productTableBody.addEventListener('click', function(event) {
+                    if (event.target && event.target.classList.contains('delete-btn')) {
+                        alert("你好 " + event.target.getAttribute('data-id'));
+                    }
+                });
+            } else if (response.data.code === 500) {
+                console.error("查询失败");
+                alert("查询失败");
+            }
+        }).catch(error => {
+            console.error("请求出错:", error);
+            alert("请求出错，请检查网络连接或稍后再试");
+        });
+    });
 
 </script>
+
+<!--<script>-->
+<!--    // let btn = document.querySelector("")-->
+
+<!--    let name = document.querySelector("#product_name").value;-->
+<!--    let cost = document.querySelector("#product_cost").value;-->
+<!--    let desc = document.querySelector("#product_desc").value;-->
+<!--    let time = document.querySelector("#product_time").value;-->
+<!--    axios({-->
+<!--        url: "http://localhost:8080/tAdmin/selectPList",-->
+<!--        method: "post",-->
+<!--        data: {-->
+<!--            product_name : name,-->
+<!--            product_cost : cost,-->
+<!--            product_desc : desc,-->
+<!--            product_time : time-->
+<!--        }-->
+<!--    }).then((response)=>{-->
+<!--        console.log("你好")-->
+<!--        if(response.data.code===200){-->
+<!--            alert("查询成功")-->
+<!--            let adminTable = document.querySelector('#adminTable');-->
+<!--            data.forEach(user => {-->
+<!--                const row = document.createElement('tr');-->
+<!--                // 创建选择单元格-->
+<!--                const chooseCell = document.createElement('td');-->
+<!--            })-->
+<!--        }else if(response.data.code===500){-->
+<!--            alert("查询失败")-->
+<!--        }-->
+<!--    })-->
+<!--</script>-->
