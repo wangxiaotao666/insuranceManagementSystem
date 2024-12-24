@@ -1,7 +1,6 @@
 package cn.lanqiao.insurancemanagementsystem.mapper;
 
 import cn.lanqiao.insurancemanagementsystem.model.pojo.ProductList;
-import cn.lanqiao.insurancemanagementsystem.model.pojo.TAdmin;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
