@@ -32,4 +32,14 @@ public class TAdminServiceImpl implements TAdminService {
             return null;
         }
     }
+
+    @Override
+    public Integer deletePList(Integer product_id) {
+        Integer result = tAdminMapper.deletePList(product_id);
+        if(result>0){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
 }

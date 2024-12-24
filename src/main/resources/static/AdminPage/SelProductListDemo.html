@@ -81,12 +81,35 @@
                 });
 
                 console.log("查询成功");
-                alert("查询成功");
+                // alert("查询成功");
 
                 // 使用事件委托来处理动态添加的按钮
                 productTableBody.addEventListener('click', function(event) {
                     if (event.target && event.target.classList.contains('delete-btn')) {
-                        alert("你好 " + event.target.getAttribute('data-id'));
+                        // 获取存在按钮中的id数据
+                        let product_id = event.target.getAttribute('data-id');
+                        alert("你好 " + product_id);
+
+                        // 发送请求到服务器删除用户
+                        axios({
+                            url: "http://localhost:8080/tAdmin/deletePList",
+                            method: "post",
+                            data: {
+                                product_id : product_id
+                            }
+                        }).then((response) => {  // 定义 response 参数
+                            if(response.data.code == '400') {
+                                alert("删除功能异常，请联系管理员");
+                            } else if(response.data.code == '500') {
+                                alert("删除失败");
+                            } else if(response.data.code == '200') {
+                                alert("删除成功");
+                                location.reload();
+                            }
+                        }).catch((error) => {  // 添加错误处理
+                            console.error("错误，请练习管理员!", error);
+                            alert("请求过程中出现错误，请稍后再试或联系管理员");
+                        });
                     }
                 });
             } else if (response.data.code === 500) {

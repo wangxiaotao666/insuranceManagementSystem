@@ -5,8 +5,11 @@ import cn.lanqiao.insurancemanagementsystem.model.pojo.TAdmin;
 import cn.lanqiao.insurancemanagementsystem.service.TAdminService;
 import cn.lanqiao.insurancemanagementsystem.service.impl.TAdminServiceImpl;
 import cn.lanqiao.insurancemanagementsystem.utils.ResponseUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import org.apache.coyote.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,15 +31,27 @@ public class TAdminController {
         try {
             List<ProductList> productLists = tAdminService.selectPList();
             if(productLists==null){
-                System.out.println(0);
                 return new ResponseUtils(500,"数据查询失败");
             }else {
-                System.out.println(1);
                 return new ResponseUtils(200,"数据查询成功",productLists);
             }
         } catch (Exception e) {
-
-            return new ResponseUtils(500,"数据查询异常");
+            return new ResponseUtils(400,"数据查询异常");
+        }
+    }
+    @RequestMapping("/deletePList")
+    public ResponseUtils deletePList(@RequestBody ProductList plt){
+        Integer product_id = plt.getProduct_id();
+        System.out.println(product_id);
+        try {
+            int result = tAdminService.deletePList(product_id);
+            if(result==1){
+                return new ResponseUtils(200,"数据删除成功");
+            }else{
+                return new ResponseUtils(500,"数据删除失败");
+            }
+        } catch (Exception e) {
+            return new ResponseUtils(400,"操作异常");
         }
 
     }
