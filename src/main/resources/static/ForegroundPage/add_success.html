@@ -15,22 +15,16 @@
 <script type="text/javascript">
 function closewindow()
 {
-	window.returnValue=false;
-	window.close();
+	location.href = "/AdminPage/AddProduct.html"
 	
 }
-function clock()
-{
+function clock() {
 	i = i -1;
-	
-	if(i > 0)
-	{
+	if(i > 0) {
 	    document.getElementById("info").innerHTML = "本窗口将在"+i+"秒后自动关闭";
 		setTimeout("clock();",1000);
-	}
-	else
-	{
-		closewindow();
+	} else {
+		location.href = "/AdminPage/AddProduct.html"
 	}
 }
 

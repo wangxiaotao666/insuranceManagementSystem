@@ -13,4 +13,6 @@ public class ProductList {
   private String product_desc;
   private String product_cost;
   private String product_time;
+  private String is_delete;
+
 }

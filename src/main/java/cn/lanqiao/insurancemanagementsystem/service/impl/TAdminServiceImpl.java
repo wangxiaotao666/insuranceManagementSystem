@@ -13,13 +13,15 @@ public class TAdminServiceImpl implements TAdminService {
     //依赖注入
     @Autowired
     private TAdminMapper tAdminMapper;
+
+
     @Override
-    public List<TAdmin> selectAll() {
-        List<TAdmin> tAdmins = tAdminMapper.selectAll();
-        if(tAdmins!=null){
-            return tAdmins;
-        }else{
+    public ProductList selectByName(String name) {
+        ProductList result = tAdminMapper.selectByName(name);
+        if(result==null){
             return null;
+        }else{
+            return result;
         }
     }
 
@@ -36,6 +38,16 @@ public class TAdminServiceImpl implements TAdminService {
     @Override
     public Integer deletePList(Integer product_id) {
         Integer result = tAdminMapper.deletePList(product_id);
+        if(result>0){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+
+    @Override
+    public Integer insertPList(ProductList productList) {
+        Integer result = tAdminMapper.insertPList(productList);
         if(result>0){
             return 1;
         }else{

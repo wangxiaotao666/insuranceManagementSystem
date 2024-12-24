@@ -22,10 +22,7 @@ public class TAdminController {
 
     @Autowired
     private TAdminServiceImpl tAdminService;
-    @RequestMapping("/select")
-    public void selectAllTUser() {
-        List<TAdmin> tAdmins = tAdminService.selectAll();
-    }
+//    查找所有保险表格信息
     @RequestMapping("/selectPList")
     public ResponseUtils selectAllPl() {
         try {
@@ -39,6 +36,7 @@ public class TAdminController {
             return new ResponseUtils(400,"数据查询异常");
         }
     }
+//    删除指定保险表格
     @RequestMapping("/deletePList")
     public ResponseUtils deletePList(@RequestBody ProductList plt){
         Integer product_id = plt.getProduct_id();
@@ -51,6 +49,32 @@ public class TAdminController {
             }
         } catch (Exception e) {
             return new ResponseUtils(400,"操作异常");
+        }
+    }
+//    新增保险表格
+    @RequestMapping("/insertPList")
+    public ResponseUtils insertPList(@RequestBody ProductList plt){
+//        如果用户没有输入数据或者数据没有输入完整，数据就不能添加数据库中
+        if(plt.getProduct_name()!="" && plt.getProduct_cost()!="" && plt.getProduct_desc()!=""){
+//            判断是保险名字是否存在，存在就不添加，不存在就添加
+            ProductList tAdmins = tAdminService.selectByName(plt.getProduct_name());
+            if(tAdmins==null){
+                try {
+                    Integer result = tAdminService.insertPList(plt);
+                    if(result==1){
+                        return new ResponseUtils(200,"数据添加成功");
+                    }else{
+                        return new ResponseUtils(500,"数据添加失败");
+                    }
+                } catch (Exception e) {
+                    return new ResponseUtils(400,"操作异常");
+                }
+            }else {
+                return new ResponseUtils<>(306,"名字已经拥有");
+            }
+
+        }else {
+            return new ResponseUtils(305,"没有数据");
         }
 
     }
