@@ -57,23 +57,22 @@
 
                 productList.forEach(product => {
                     const productTemplate = `
-                    <tr>
+                    <tr data-product-id="${product.product_id}">
                         <td class="product_name">保险名称：${product.product_name}</td>
                         <td class="product_cost">保险费用：${product.product_cost}</td>
                     </tr>
-                    <tr>
+                    <tr data-product-id="${product.product_id}">
                         <td colspan="2" class="product_time">发布时间：${product.product_time}</td>
                     </tr>
-                    <tr>
+                    <tr data-product-id="${product.product_id}">
                         <td colspan="2" class="product_desc">保险内容：</td>
                     </tr>
-                    <tr>
+                    <tr data-product-id="${product.product_id}">
                         <textarea disabled style="width:178%;height:111px;padding-left:10px;word-break:break-all;" class="product_desc">${product.product_desc}</textarea>
                     </tr>
-                    <tr>
+                    <tr data-product-id="${product.product_id}">
                         <td colspan="2">
-<!--                        class="btn btn-mini btn-danger"-->
-                            <button class="delete-btn btn btn-mini btn-danger" data-id="${product.product_id}" style="color: white" >购买</button>
+                            <button class="buy-btn btn btn-mini btn-danger" data-id="${product.product_id}" style="color: white;">购买</button>
                         </td>
                         <br />
                     </tr>
@@ -82,32 +81,50 @@
                 });
 
                 console.log("查询成功");
-                // alert("查询成功");
 
-                // 使用事件委托来处理动态添加的按钮
+                // 使用事件委托来处理动态添加的购买按钮点击事件
                 productTableBody.addEventListener('click', function(event) {
-                    if (event.target && event.target.classList.contains('delete-btn')) {
-                        // 获取存在按钮中的id数据
-                        let product_id = event.target.getAttribute('data-id');
-                        // document.querySelector("@")
-                        // 发送请求到服务器删除用户
+                    if (event.target && event.target.classList.contains('buy-btn')) {
+                        let productId = event.target.getAttribute('data-id');
 
+                        // 找到最近的 tr 父元素（即当前产品的行）
+                        let row = event.target.closest('tr[data-product-id]');
+
+                        // 获取同一产品所有行
+                        let rowsForProduct = [...row.parentElement.querySelectorAll(`tr[data-product-id="${productId}"]`)];
+
+                        // 提取产品详细信息并清理文本内容
+                        let name = rowsForProduct.find(row => row.querySelector('.product_name'))
+                            ?.querySelector('.product_name').textContent.replace('保险名称：', '').trim();
+                        let cost = rowsForProduct.find(row => row.querySelector('.product_cost'))
+                            ?.querySelector('.product_cost').textContent.replace('保险费用：', '').trim();
+                        let time = rowsForProduct.find(row => row.querySelector('.product_time'))
+                            ?.querySelector('.product_time').textContent.replace('发布时间：', '').trim();
+                        let desc = rowsForProduct.find(row => row.querySelector('textarea.product_desc'))
+                            ?.querySelector('textarea.product_desc').value.trim();
+
+                        // 发送请求到服务器进行购买操作
                         axios({
-                            url: "http://localhost:8080/tAdminUser/updatePList",
+                            url: "http://localhost:8080/tAdminUser/buyPlist",
                             method: "post",
                             data: {
-                                product_id : product_id
+                                order_id: productId,
+                                order_name: name,
+                                order_cost: cost,
+                                order_time: time,
+                                order_desc: desc
                             }
-                        }).then((response) => {  // 定义 response 参数
+                        }).then((response) => {
+                            alert(productId + " " + name + " " + cost + " " + time + " " + desc);
                             if(response.data.code == '400') {
-                                alert("删除功能异常，请联系管理员");
+                                alert("添加功能异常，请联系管理员");
                             } else if(response.data.code == '500') {
-                                alert("删除失败");
+                                alert("添加失败");
                             } else if(response.data.code == '200') {
-                                alert("删除成功");
+                                alert("添加成功");
                                 location.reload();
                             }
-                        }).catch((error) => {  // 添加错误处理
+                        }).catch((error) => {
                             console.error("错误，请练习管理员!", error);
                             alert("请求过程中出现错误，请稍后再试或联系管理员");
                         });

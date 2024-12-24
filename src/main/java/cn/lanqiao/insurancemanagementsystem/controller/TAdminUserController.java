@@ -1,10 +1,12 @@
 package cn.lanqiao.insurancemanagementsystem.controller;
 
+import cn.lanqiao.insurancemanagementsystem.model.pojo.OrderList;
 import cn.lanqiao.insurancemanagementsystem.model.pojo.ProductList;
 import cn.lanqiao.insurancemanagementsystem.service.impl.TAdminServiceImpl;
 import cn.lanqiao.insurancemanagementsystem.service.impl.TAdminUserMapperImpl;
 import cn.lanqiao.insurancemanagementsystem.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,8 +33,22 @@ public class TAdminUserController {
             return new ResponseUtils(400,"数据查询异常");
         }
     }
-//    @RequestMapping("/InsertPList")
-//    public ResponseUtils InsertPList(){
-////        tAdminUserMapper.
-//    }
+    @RequestMapping("/buyPlist")
+    public ResponseUtils buyPlist(@RequestBody OrderList orderList){
+        try {
+            System.out.println(orderList.getOrder_id());
+            System.out.println(orderList.getOrder_cost());
+            System.out.println(orderList.getOrder_name());
+            System.out.println(orderList.getOrder_state());
+            Integer result = tAdminUserMapper.buyPlist(orderList);
+
+            if(result==1){
+                return new ResponseUtils(200,"购买成功");
+            }else{
+                return new ResponseUtils(500,"购买失败");
+            }
+        } catch (Exception e) {
+            return new ResponseUtils(400,"购买异常");
+        }
+    }
 }
