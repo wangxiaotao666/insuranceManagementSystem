@@ -98,10 +98,26 @@
                             ?.querySelector('.product_name').textContent.replace('保险名称：', '').trim();
                         let cost = rowsForProduct.find(row => row.querySelector('.product_cost'))
                             ?.querySelector('.product_cost').textContent.replace('保险费用：', '').trim();
-                        let time = rowsForProduct.find(row => row.querySelector('.product_time'))
-                            ?.querySelector('.product_time').textContent.replace('发布时间：', '').trim();
+                        // let time = rowsForProduct.find(row => row.querySelector('.product_time'))
+                        //     ?.querySelector('.product_time').textContent.replace('发布时间：', '').trim();
                         let desc = rowsForProduct.find(row => row.querySelector('textarea.product_desc'))
                             ?.querySelector('textarea.product_desc').value.trim();
+                        // 录入实时时间的函数
+                        function getCurrentFormattedTime() {
+                            const now = new Date();
+                            // 获取年份、月份（从0开始）、日、小时、分钟和秒
+                            let year = now.getFullYear();
+                            let month = String(now.getMonth() + 1).padStart(2, '0'); // 月份从0开始，所以要加1
+                            let day = String(now.getDate()).padStart(2, '0');
+                            let hours = String(now.getHours()).padStart(2, '0');
+                            let minutes = String(now.getMinutes()).padStart(2, '0');
+                            let seconds = String(now.getSeconds()).padStart(2, '0');
+                            // 返回格式化的日期时间字符串
+                            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+                        }
+
+// 打印当前时间
+                        let time = getCurrentFormattedTime();
 
                         // 发送请求到服务器进行购买操作
                         axios({
