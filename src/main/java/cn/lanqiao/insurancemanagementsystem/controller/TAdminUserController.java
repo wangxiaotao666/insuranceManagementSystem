@@ -23,46 +23,7 @@ public class TAdminUserController {
     @RequestMapping("/selectPList")
     public ResponseUtils selectAllPl() {
         try {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            List<ProductList> productLists = tAdminUserMapper.selectPList();
             if(productLists==null){
                 return new ResponseUtils(500,"数据查询失败");
             }else {
@@ -75,10 +36,6 @@ public class TAdminUserController {
     @RequestMapping("/buyPlist")
     public ResponseUtils buyPlist(@RequestBody OrderList orderList){
         try {
-//            System.out.println(orderList.getOrder_id());
-//            System.out.println(orderList.getOrder_cost());
-//            System.out.println(orderList.getOrder_name());
-//            System.out.println(orderList.getOrder_state());
             Integer result = tAdminUserMapper.buyPlist(orderList);
 
             if(result==1){
