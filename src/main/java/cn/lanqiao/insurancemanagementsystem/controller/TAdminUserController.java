@@ -23,7 +23,46 @@ public class TAdminUserController {
     @RequestMapping("/selectPList")
     public ResponseUtils selectAllPl() {
         try {
-            List<ProductList> productLists = tAdminUserMapper.selectPList();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             if(productLists==null){
                 return new ResponseUtils(500,"数据查询失败");
             }else {

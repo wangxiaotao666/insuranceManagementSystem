@@ -15,7 +15,7 @@ public class TAdmin {
   private Integer age;
   private String phone;
   private String address;
-  private Integer isDelete;
+  private Integer is_delete;
   private String password;
 
 }
