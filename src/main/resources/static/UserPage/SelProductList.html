@@ -115,7 +115,8 @@
                                 order_desc: desc
                             }
                         }).then((response) => {
-                            alert(productId + " " + name + " " + cost + " " + time + " " + desc);
+                            // 测试前端数据是否正确
+                            // alert(productId + " " + name + " " + cost + " " + time + " " + desc);
                             if(response.data.code == '400') {
                                 alert("添加功能异常，请联系管理员");
                             } else if(response.data.code == '500') {
