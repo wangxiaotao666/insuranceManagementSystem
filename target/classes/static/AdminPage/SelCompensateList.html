@@ -1,0 +1,75 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+    
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	
+	<link rel="stylesheet" type="text/css" href="/Styles/admin-all.css" />
+    <link rel="stylesheet" type="text/css" href="/Styles/base.css"/>
+    <script type="text/javascript" src="/Scripts/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
+    <link rel="stylesheet" type="text/css" href="/Styles/formui.css"/>
+    <script type="text/javascript" src="/Scripts/tb.js"></script>
+    <script type="text/javascript" src="/laydate/laydate.js"></script>
+
+	
+  </head>
+
+  <body>
+    <div class="alert alert-info" style="width:100%;">当前位置<b class="tip"></b>赔偿申请列表</div>
+    <table class="tb" id="list">
+        <tbody>
+            <tr>
+                <th>保险名称</th>
+                <th>保险金额</th>
+                <th>购买时间</th>
+                <th>保险人</th>
+                <th>保险状态</th>
+                <th>操作</th>
+            </tr>
+            
+            		<tr class="demo">	
+            		<td>
+            			<!-- <%=ol.getOrder_name() %> -->
+            		</td>
+            		<td>
+               			<!-- <%=ol.getOrder_cost() %> -->
+                	</td>
+                	<td>
+               			<!-- <%=ol.getOrder_time() %> -->
+                	</td>
+                	<td>
+               			<!-- <%=ol.getOrder_uname() %> -->
+                	</td>
+                	<td>
+                	<!-- <%if("9".equals(ol.getOrder_state())){ %>
+                		保险已赔付
+                	<%}else{ %>
+                		保险生效中
+                	<%} %>	 -->
+                	</td>
+                	<td>
+                	<!-- <%if("9".equals(ol.getOrder_state())){ %>
+                		赔付申请已通过
+                	<%}else if("n".equals(ol.getOrder_state())){ %>
+                		赔付申请未通过
+                	<%}else{ %> -->
+                		<a href="AgreeCom!agreeCom?oid=<%=ol.getOrder_id() %>" class="btn btn-mini btn-danger" >同意</a>/
+                		<a href="DisagreeCom!disagreeCom?oid=<%=ol.getOrder_id() %>" class="btn btn-mini btn-danger" >不同意</a>
+                	</td>
+                	</tr>
+    
+        </tbody>
+    </table>
+  </body>
+</html>

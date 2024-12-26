@@ -76,7 +76,5 @@ public class TAdminController {
         }else {
             return new ResponseUtils(305,"没有数据");
         }
-
     }
-
 }
