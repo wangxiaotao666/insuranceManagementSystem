@@ -3,11 +3,11 @@ server:
 spring:
   datasource:
     username: root
-#    password: 20010720Lmx
-    password: 123456
-
-    url: jdbc:mysql://localhost:3306/insurancebusiness?&useSSL=false&serverTimezone=UTC&characterEncoding=utf8&characterSetResults=utf8
-#    url: jdbc:mysql://lmxdxl99.com.cn/insurancebusiness?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&characterEncoding=utf8&characterSetResults=utf8
+    password: 20010720Lmx
+#    password: 123456
+#    url: jdbc:mysql://localhost:3306/insurancebusiness?&useSSL=false&serverTimezone=UTC&characterEncoding=utf8&characterSetResults=utf8
+#    url: jdbc:mysql://47.109.206.82:3306/insurancebusiness?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&characterEncoding=utf8&characterSetResults=utf8
+    url: jdbc:mysql://47.109.206.82:3306/insurancebusiness?&useSSL=false&serverTimezone=UTC&characterEncoding=utf8&characterSetResults=utf8
     driver-class-name: com.mysql.cj.jdbc.Driver
   thymeleaf:
     cache: false

@@ -36,10 +36,6 @@ public class TAdminUserController {
     @RequestMapping("/buyPlist")
     public ResponseUtils buyPlist(@RequestBody OrderList orderList){
         try {
-            System.out.println(orderList.getOrder_id());
-            System.out.println(orderList.getOrder_cost());
-            System.out.println(orderList.getOrder_name());
-            System.out.println(orderList.getOrder_state());
             Integer result = tAdminUserMapper.buyPlist(orderList);
 
             if(result==1){

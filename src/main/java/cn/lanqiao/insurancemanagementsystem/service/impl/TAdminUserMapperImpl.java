@@ -14,6 +14,7 @@ public class TAdminUserMapperImpl implements TAdminUserService {
     private TAdminUserMapper tAdminUserMapper;
     @Override
     public List<ProductList> selectPList() {
+        System.out.println(66);
         List<ProductList> tAdmins = tAdminUserMapper.selectPList();
         if(tAdmins!=null){
             return tAdmins;
