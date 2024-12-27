@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Update;
 import java.util.List;
 
 public interface TAdminMapper {
-//    根据姓名查询用户
+//    根据姓名查询用户1
     @Select("select * from product_list where product_name = #{product_name} and is_delete=0")
     ProductList selectByName(String product_name);
 //   查询保险列表数据
