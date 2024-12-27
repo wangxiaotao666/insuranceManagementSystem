@@ -3,12 +3,17 @@ package cn.lanqiao.insurancemanagementsystem.controller;
 import cn.lanqiao.insurancemanagementsystem.model.pojo.UserList;
 import cn.lanqiao.insurancemanagementsystem.service.impl.loginserviceimpl;
 import cn.lanqiao.insurancemanagementsystem.utils.ResponseUtils;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 @RestController
 @RequestMapping("/tAdmin")
@@ -23,9 +28,11 @@ public class logincontroller {
 //    @CrossOrigin(origins = "*")
 //    @PostMapping("/login")
     @RequestMapping("/login")
-    public ResponseEntity<ResponseUtils> login(@RequestBody UserList request) {
+    public ResponseEntity<ResponseUtils> login(@RequestBody UserList request , HttpServletResponse response) throws UnsupportedEncodingException {
         String username = request.getUsername();
         String password = request.getPassword();
+        UserList log = tAdminService.findByUsername(username);
+//        System.out.println(log.getName());
 
 
         if (username == null || password == null) {
@@ -38,6 +45,14 @@ public class logincontroller {
         UserList admin = tAdminService.findByUsername(username);
 
         if (admin != null && admin.getPassword().equals(password)) {
+
+            Cookie cookie1 = new Cookie("name",log.getName());
+
+            // 设置cookie的存活时间
+            cookie1.setMaxAge(60 * 60 * 24);
+            // 设置cookie的路径，使其在整个应用中可用
+            cookie1.setPath("/");
+            response.addCookie(cookie1);
             logger.info("Login successful for username: {}", username);
             // 登录成功
             return new ResponseEntity<>(new ResponseUtils(200, "登录成功", admin), HttpStatus.OK);

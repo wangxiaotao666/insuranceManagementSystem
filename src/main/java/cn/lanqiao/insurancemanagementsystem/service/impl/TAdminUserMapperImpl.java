@@ -3,6 +3,7 @@ package cn.lanqiao.insurancemanagementsystem.service.impl;
 import cn.lanqiao.insurancemanagementsystem.mapper.TAdminUserMapper;
 import cn.lanqiao.insurancemanagementsystem.model.pojo.OrderList;
 import cn.lanqiao.insurancemanagementsystem.model.pojo.ProductList;
+import cn.lanqiao.insurancemanagementsystem.model.vo.OrderListVo;
 import cn.lanqiao.insurancemanagementsystem.service.TAdminUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class TAdminUserMapperImpl implements TAdminUserService {
     }
 
     @Override
-    public Integer buyPlist(OrderList orderList) {
+    public Integer buyPlist(OrderListVo orderList) {
         Integer result = tAdminUserMapper.buyPlist(orderList);
         if(result>0){
             return 1;
