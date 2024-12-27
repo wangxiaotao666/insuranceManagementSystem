@@ -33,4 +33,14 @@ public class TAdminUserMapperImpl implements TAdminUserService {
             return 0;
         }
     }
+
+    @Override
+    public ProductList selectNameById(String name) {
+        ProductList productList = tAdminUserMapper.selectNameById(name);
+        if(productList!=null){
+            return productList;
+        }else{
+            return null;
+        }
+    }
 }

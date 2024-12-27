@@ -15,6 +15,7 @@ public class OrderListVo {
   private String order_uname;
   private String order_uid;
   private String order_state;
-  private String product_id;
+  private Integer product_id;
   private String name;
+
 }
