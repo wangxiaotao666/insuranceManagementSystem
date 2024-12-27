@@ -27,6 +27,7 @@ public class logincontroller {
         String username = request.getUsername();
         String password = request.getPassword();
 
+
         if (username == null || password == null) {
             logger.warn("Login request received with null username or password");
             return new ResponseEntity<>(new ResponseUtils(400, "用户名或密码不能为空"), HttpStatus.BAD_REQUEST);

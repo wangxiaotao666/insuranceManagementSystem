@@ -50,14 +50,18 @@
         let password = document.querySelector("#pwd").value;
 
         try {
-            let result = await axios.post("http://localhost:8080/tAdmin/login", {
+            let result = await axios.post('http://localhost:8080/tAdmin/login', {
                 username: username,
                 password: password
             });
             console.log(result); // Debugging line to check server response
             if (result.data.code === 200) {
                 sessionStorage.setItem('token', JSON.stringify(result.data.data));
-                location.href = "/main.html";
+                if(result.data.data.type=='admin'){
+                    location.href = "/main.html";
+                }else if(result.data.data.type=='customer') {
+                    location.href = "/UserMain.html";
+                }
             } else {
                 alert(result.data.message);
             }
