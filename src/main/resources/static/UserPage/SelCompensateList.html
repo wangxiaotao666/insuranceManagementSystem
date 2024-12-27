@@ -1,18 +1,17 @@
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-  <head>
+<head>
     <base href="<%=basePath%>">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title></title>
-    
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	
-	<link rel="stylesheet" type="text/css" href="/Styles/admin-all.css" />
+    <title>个人申请赔偿列表</title>
+
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="This is my page">
+
+    <link rel="stylesheet" type="text/css" href="/Styles/admin-all.css" />
     <link rel="stylesheet" type="text/css" href="/Styles/base.css"/>
     <script type="text/javascript" src="/Scripts/jquery-1.7.2.js"></script>
     <script type="text/javascript" src="/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
@@ -21,56 +20,105 @@
     <script type="text/javascript" src="/Scripts/tb.js"></script>
     <script type="text/javascript" src="/laydate/laydate.js"></script>
 
-	
-  </head>
+    <script src="../js/axios.min.js"></script> <!-- 引入 axios -->
 
-  <body>
-    <div class="alert alert-info" style="width:100%;">当前位置<b class="tip"></b>个人申请赔偿列表</div>
-    <table class="tb" id="list">
-        <tbody>
-            <tr>
-                <th>保险名称</th>
-                <th>保险金额</th>
-                <th>购买时间</th>
-                <th>保险人</th>
-                <th>保险状态</th>
-                <th>操作</th>
-            </tr>
-    
-            		<tr class="demo">	
-            		<td>
-            			<!-- <%=ol.getOrder_name() %> -->
-            		</td>
-            		<td>
-               			<!-- <%=ol.getOrder_cost() %> -->
-                	</td>
-                	<td>
-               			<!-- <%=ol.getOrder_time() %> -->
-                	</td>
-                	<td>
-               			<!-- <%=ol.getOrder_uname() %> -->
-                	</td>
-                	<td>
-                	<!-- <%if("9".equals(ol.getOrder_state())){ %>
-                		保险已赔付
-                	<%}else{ %>
-                		保险生效中
-                	<%} %>	 -->
-                	</td>
-                	<td>
-                	<!-- <%if("1".equals(ol.getOrder_state())){ %>
-                		<a href="ApplyPayment!applyPayment?oid=<%=ol.getOrder_id() %>&pid=<%="" %>" class="btn btn-mini btn-danger" >申请赔付</a>
-                	<%}else if("2".equals(ol.getOrder_state())){ %>
-                		赔付申请待审核
-                	<%}else if("n".equals(ol.getOrder_state())){ %>
-                		赔付未通过/<a href="ApplyPayment!applyPayment?oid=<%=ol.getOrder_id() %>&pid=<%="" %>" class="btn btn-mini btn-danger" >再次申请</a>
-                	<%}else{ %>
-                		赔付已通过
-                	<%} %>	 -->
-                	</td>
-                	</tr>
-       
-        </tbody>
-    </table>
-  </body>
+</head>
+
+<body>
+<div class="alert alert-info" style="width:100%;">当前位置<b class="tip"></b>个人申请赔偿列表</div>
+<table class="tb" id="list">
+    <thead>
+    <tr>
+        <th>保险名称</th>
+        <th>保险金额</th>
+        <th>购买时间</th>
+        <th>保险人</th>
+        <th>保险状态</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="insuranceList">
+    <!-- 保险数据将动态插入这里 -->
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 发送 GET 请求
+        axios({
+            url: "http://localhost:8080/userIndemnity/getList",  // 后端接口
+            method: "get", // 使用 GET 方法获取数据
+        })
+            .then((response) => {
+                if (response.data.code === 200) {
+                    // 获取保险数据
+                    const insuranceList = response.data.data;  // 假设数据保存在 `data` 中
+                    const insuranceTableBody = document.getElementById("insuranceList");
+
+                    // 遍历数据并生成表格行
+                    insuranceList.forEach(insurance => {
+                        // 创建表格行
+                        const row = document.createElement("tr");
+
+                        // 保险名称
+                        const nameCell = document.createElement("td");
+                        nameCell.textContent = insurance.order_name || '';
+                        row.appendChild(nameCell);
+
+                        // 保险金额
+                        const amountCell = document.createElement("td");
+                        amountCell.textContent = insurance.order_cost || '';
+                        row.appendChild(amountCell);
+
+                        // 购买时间
+                        const purchaseDateCell = document.createElement("td");
+                        purchaseDateCell.textContent = insurance.order_time || '';
+                        row.appendChild(purchaseDateCell);
+
+                        // 保险人
+                        const insuredPersonCell = document.createElement("td");
+                        insuredPersonCell.textContent = insurance.order_uname || '';
+                        row.appendChild(insuredPersonCell);
+
+                        // 保险状态
+                        const statusCell = document.createElement("td");
+                        statusCell.textContent = insurance.order_state === "9" ? "保险已赔付" : "保险生效中";  // 状态判断
+                        row.appendChild(statusCell);
+
+                        // 操作列 (例如：申请赔付按钮)
+                        const actionCell = document.createElement("td");
+                        if (insurance.order_state === "1") {
+                            const applyButton = document.createElement("a");
+                            applyButton.href = `ApplyPayment!applyPayment?oid=${insurance.order_id}&pid=${insurance.product_id}`;
+                            applyButton.classList.add("btn", "btn-mini", "btn-danger");
+                            applyButton.textContent = "申请赔付";
+                            actionCell.appendChild(applyButton);
+                        } else if (insurance.order_state === "2") {
+                            actionCell.textContent = "赔付申请待审核";
+                        } else if (insurance.order_state === "n") {
+                            const retryButton = document.createElement("a");
+                            retryButton.href = `ApplyPayment!applyPayment?oid=${insurance.order_id}&pid=${insurance.product_id}`;
+                            retryButton.classList.add("btn", "btn-mini", "btn-danger");
+                            retryButton.textContent = "再次申请";
+                            actionCell.appendChild(retryButton);
+                        } else {
+                            actionCell.textContent = "赔付已通过";
+                        }
+                        row.appendChild(actionCell);
+
+                        // 将行添加到表格
+                        insuranceTableBody.appendChild(row);
+                    });
+                } else {
+                    console.error("查询失败");
+                    alert("查询失败");
+                }
+            })
+            .catch(error => {
+                console.error("请求出错:", error);
+                alert("请求出错，请检查网络连接或稍后再试");
+            });
+    });
+</script>
+</body>
 </html>
