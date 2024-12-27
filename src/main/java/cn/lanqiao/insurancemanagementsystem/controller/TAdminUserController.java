@@ -2,7 +2,6 @@ package cn.lanqiao.insurancemanagementsystem.controller;
 
 import cn.lanqiao.insurancemanagementsystem.model.pojo.OrderList;
 import cn.lanqiao.insurancemanagementsystem.model.pojo.ProductList;
-import cn.lanqiao.insurancemanagementsystem.service.impl.TAdminServiceImpl;
 import cn.lanqiao.insurancemanagementsystem.service.impl.TAdminUserMapperImpl;
 import cn.lanqiao.insurancemanagementsystem.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
