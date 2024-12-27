@@ -1,5 +1,4 @@
 package cn.lanqiao.insurancemanagementsystem.mapper;
-
 import cn.lanqiao.insurancemanagementsystem.model.pojo.OrderList;
 import org.apache.ibatis.annotations.Select;
 

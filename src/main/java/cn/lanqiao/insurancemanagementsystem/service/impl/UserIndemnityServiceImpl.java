@@ -19,7 +19,7 @@ public class UserIndemnityServiceImpl implements UserIndemnityService {
     private UserIndemnityMapper userIndemnityMapper;
     @Override
     public List<OrderList> getIndemnityList() {
-        System.out.println(9999);
+//        System.out.println(9999);
         List<OrderList> tAdmins = userIndemnityMapper.getIndemnityList();
         if(tAdmins!=null){
             return tAdmins;

@@ -84,7 +84,7 @@
                         const statusCell = document.createElement("td");
                         statusCell.textContent = insurance.order_state === "9" ? "保险已赔付" : "保险生效中";  // 状态判断
                         row.appendChild(statusCell);
-
+                        //
                         // 操作列 (例如：申请赔付按钮)
                         const actionCell = document.createElement("td");
                         if (insurance.order_state === "1") {

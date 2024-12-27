@@ -5,7 +5,6 @@ import cn.lanqiao.insurancemanagementsystem.model.pojo.OrderList;
 import cn.lanqiao.insurancemanagementsystem.service.impl.UserIndemnityServiceImpl;
 import cn.lanqiao.insurancemanagementsystem.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
