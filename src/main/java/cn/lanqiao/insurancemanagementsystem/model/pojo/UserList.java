@@ -19,4 +19,6 @@ public class UserList {
   private String type;
 
 
+  public UserList(String username, String name, String age, String phone, String address) {
+  }
 }
