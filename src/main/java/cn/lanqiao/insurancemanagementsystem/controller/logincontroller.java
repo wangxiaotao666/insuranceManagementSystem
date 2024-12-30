@@ -1,10 +1,8 @@
 package cn.lanqiao.insurancemanagementsystem.controller;
 
 import cn.lanqiao.insurancemanagementsystem.model.pojo.UserList;
-import cn.lanqiao.insurancemanagementsystem.service.impl.loginserviceimpl;
+import cn.lanqiao.insurancemanagementsystem.service.UserService;
 import cn.lanqiao.insurancemanagementsystem.utils.ResponseUtils;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,28 +10,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 @RestController
 @RequestMapping("/tAdmin")
 public class logincontroller {
 
     private static final Logger logger = LoggerFactory.getLogger(logincontroller.class);
-
+//1323
     // 依赖注入
     @Autowired
-    private loginserviceimpl tAdminService;
+    private UserService userService;
 
-//    @CrossOrigin(origins = "*")
-//    @PostMapping("/login")
-    @RequestMapping("/login")
-    public ResponseEntity<ResponseUtils> login(@RequestBody UserList request , HttpServletResponse response) throws UnsupportedEncodingException {
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<ResponseUtils> login(@RequestBody LoginRequest request) {
         String username = request.getUsername();
         String password = request.getPassword();
-        UserList log = tAdminService.findByUsername(username);
-//        System.out.println(log.getName());
-
 
         if (username == null || password == null) {
             logger.warn("Login request received with null username or password");
@@ -42,20 +32,12 @@ public class logincontroller {
 
         logger.info("Received login request for username: {}", username);
 
-        UserList admin = tAdminService.findByUsername(username);
+        UserList user = userService.findByUsername(username);
 
-        if (admin != null && admin.getPassword().equals(password)) {
-
-            Cookie cookie1 = new Cookie("name",log.getName());
-
-            // 设置cookie的存活时间
-            cookie1.setMaxAge(60 * 60 * 24);
-            // 设置cookie的路径，使其在整个应用中可用
-            cookie1.setPath("/");
-            response.addCookie(cookie1);
+        if (user != null && user.getPassword().equals(password)) {
             logger.info("Login successful for username: {}", username);
-            // 登录成功
-            return new ResponseEntity<>(new ResponseUtils(200, "登录成功", admin), HttpStatus.OK);
+            // 登录成功，返回用户类型
+            return new ResponseEntity<>(new ResponseUtils(200, "登录成功", user.getType()), HttpStatus.OK);
         } else {
             logger.warn("Login failed for username: {}. Invalid credentials.", username);
             // 登录失败

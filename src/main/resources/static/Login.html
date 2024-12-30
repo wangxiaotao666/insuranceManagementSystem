@@ -50,17 +50,17 @@
         let password = document.querySelector("#pwd").value;
 
         try {
-            let result = await axios.post('http://localhost:8080/tAdmin/login', {
+            let result = await axios.post("http://localhost:8080/tAdmin/login", {
                 username: username,
                 password: password
             });
             console.log(result); // Debugging line to check server response
             if (result.data.code === 200) {
-                sessionStorage.setItem('token', JSON.stringify(result.data.data));
-                if(result.data.data.type=='admin'){
-                    location.href = "/main.html";
-                }else if(result.data.data.type=='customer') {
-                    location.href = "/UserMain.html";
+                sessionStorage.setItem('token', 'some_token_here'); // 存储 token
+                if (result.data.data === "1") { // 确保比较字符串
+                    location.href = "/main.html"; // 管理员页面
+                } else {
+                    location.href = "/UserMain.html"; // 普通用户页面1
                 }
             } else {
                 alert(result.data.message);
