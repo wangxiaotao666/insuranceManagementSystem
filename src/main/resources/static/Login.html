@@ -56,8 +56,12 @@
             });
             console.log(result); // Debugging line to check server response
             if (result.data.code === 200) {
-                sessionStorage.setItem('token', JSON.stringify(result.data.data));
-                location.href = "/main.html";
+                sessionStorage.setItem('token', 'some_token_here'); // 存储 token
+                if (result.data.data === "1") { // 确保比较字符串
+                    location.href = "/main.html"; // 管理员页面
+                } else {
+                    location.href = "/UserMain.html"; // 普通用户页面
+                }
             } else {
                 alert(result.data.message);
             }

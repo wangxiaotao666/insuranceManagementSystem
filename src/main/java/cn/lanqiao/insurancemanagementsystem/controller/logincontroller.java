@@ -1,7 +1,7 @@
 package cn.lanqiao.insurancemanagementsystem.controller;
 
 import cn.lanqiao.insurancemanagementsystem.model.pojo.UserList;
-import cn.lanqiao.insurancemanagementsystem.service.impl.loginserviceimpl;
+import cn.lanqiao.insurancemanagementsystem.service.UserService;
 import cn.lanqiao.insurancemanagementsystem.utils.ResponseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +18,10 @@ public class logincontroller {
 
     // 依赖注入
     @Autowired
-    private loginserviceimpl tAdminService;
+    private UserService userService;
 
-//    @CrossOrigin(origins = "*")
-//    @PostMapping("/login")
-    @RequestMapping("/login")
-    public ResponseEntity<ResponseUtils> login(@RequestBody UserList request) {
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<ResponseUtils> login(@RequestBody LoginRequest request) {
         String username = request.getUsername();
         String password = request.getPassword();
 
@@ -34,12 +32,12 @@ public class logincontroller {
 
         logger.info("Received login request for username: {}", username);
 
-        UserList admin = tAdminService.findByUsername(username);
+        UserList user = userService.findByUsername(username);
 
-        if (admin != null && admin.getPassword().equals(password)) {
+        if (user != null && user.getPassword().equals(password)) {
             logger.info("Login successful for username: {}", username);
-            // 登录成功
-            return new ResponseEntity<>(new ResponseUtils(200, "登录成功", admin), HttpStatus.OK);
+            // 登录成功，返回用户类型
+            return new ResponseEntity<>(new ResponseUtils(200, "登录成功", user.getType()), HttpStatus.OK);
         } else {
             logger.warn("Login failed for username: {}. Invalid credentials.", username);
             // 登录失败
