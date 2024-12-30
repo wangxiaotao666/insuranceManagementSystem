@@ -3,6 +3,8 @@ package cn.lanqiao.insurancemanagementsystem.controller;
 import cn.lanqiao.insurancemanagementsystem.model.pojo.UserList;
 import cn.lanqiao.insurancemanagementsystem.service.UserService;
 import cn.lanqiao.insurancemanagementsystem.utils.ResponseUtils;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ public class logincontroller {
     private UserService userService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<ResponseUtils> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<ResponseUtils> login(@RequestBody LoginRequest request, HttpServletResponse response) {
         String username = request.getUsername();
         String password = request.getPassword();
 
@@ -36,6 +38,14 @@ public class logincontroller {
 
         if (user != null && user.getPassword().equals(password)) {
             logger.info("Login successful for username: {}", username);
+            Cookie cookie1 = new Cookie("name",user.getName());
+
+            // 设置cookie的存活时间
+            cookie1.setMaxAge(60 * 60 * 24);
+            // 设置cookie的路径，使其在整个应用中可用
+            cookie1.setPath("/");
+            response.addCookie(cookie1);
+
             // 登录成功，返回用户类型
             return new ResponseEntity<>(new ResponseUtils(200, "登录成功", user.getType()), HttpStatus.OK);
         } else {

@@ -1,6 +1,7 @@
 package cn.lanqiao.insurancemanagementsystem.mapper;
 
 import cn.lanqiao.insurancemanagementsystem.model.pojo.ProductList;
+import cn.lanqiao.insurancemanagementsystem.model.pojo.TAdmin;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -20,5 +21,12 @@ public interface TAdminMapper {
 //    新增保险列表功能
     @Insert("insert into product_list values(null,#{product_name},#{product_desc},#{product_cost},#{product_time},0)")
     Integer insertPList(ProductList productList);
-
+    /**
+     * 注册功能
+     */
+    @Insert("insert into user_list values (null,#{username},#{password},#{nickname},#{sex},#{age},#{phone},#{address},0)")
+    int register(TAdmin tAdmin);
+    //注册查询用户名是否重复
+    @Select("select * from user_list where username = #{username} ")
+    TAdmin selectByName1(String username);
 }
