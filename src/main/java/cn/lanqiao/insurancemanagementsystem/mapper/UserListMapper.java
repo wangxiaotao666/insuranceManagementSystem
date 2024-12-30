@@ -5,13 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import java.util.List;
-
 @Mapper
-public interface loginmapper {
-    List<UserList> selectAll();
-
-    //登录
+public interface UserListMapper {
     @Select("SELECT * FROM user_list WHERE username = #{username}")
     UserList findByUsername(@Param("username") String username);
 }
