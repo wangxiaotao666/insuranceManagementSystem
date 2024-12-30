@@ -15,5 +15,12 @@ import java.util.List;
  */
 public interface OrderListService {
     List<OrderList> getorderlist();
-//1
+//查询赔偿申请列表
+List<OrderList> getcompensationlist();
+    // 同意赔付申请
+    int agreeCompensation(OrderList orderList);
+
+    // 拒绝赔付申请
+    int disagreeCompensation(OrderList orderList);
 }
+
