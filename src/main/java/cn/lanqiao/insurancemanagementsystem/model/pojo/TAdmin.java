@@ -12,10 +12,11 @@ public class TAdmin {
   private String username;
   private String nickname;
   private String gender;
-  private Integer age;
+  private String age;
   private String phone;
   private String address;
   private Integer is_delete;
   private String password;
+  private String sex;
 
 }
