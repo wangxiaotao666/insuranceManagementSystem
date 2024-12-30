@@ -28,7 +28,6 @@ public class OrderListController {
     public ResponseUtils getOrderList(){
         try{
     List<OrderList> orderLists = orderListService.getorderlist();
-        System.out.println(orderLists);
         if (orderLists ==null){
             //查询为空(失败)
             return new ResponseUtils(500,"查询失败");

@@ -70,7 +70,7 @@ public class TAdminController {
                     return new ResponseUtils(400,"操作异常");
                 }
             }else {
-                return new ResponseUtils<>(306,"名字已经拥有");
+                return new ResponseUtils(306,"名字已经拥有");
             }
 
         }else {
