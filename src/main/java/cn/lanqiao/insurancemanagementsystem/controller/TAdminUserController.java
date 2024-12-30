@@ -48,6 +48,10 @@ public class TAdminUserController {
             Cookie cookie = cookies[0];
             String value = cookie.getValue();
             orderList.setName(value);
+        //      根据保险名查询保险id
+            ProductList productList = tAdminUserMapper.selectNameById(orderList.getOrder_name());
+//            将查询到的赋值
+            orderList.setProduct_id(productList.getProduct_id());
             Integer result = tAdminUserMapper.buyPlist(orderList);
             if(result==1){
                 return new ResponseUtils(200,"购买成功");

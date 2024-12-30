@@ -13,4 +13,7 @@ public interface TAdminUserService {
     List<ProductList> selectPList();
     //       购买保险列表功能
     Integer buyPlist(OrderListVo orderList);
+    //      根据保险名查询保险id
+    ProductList selectNameById(String name);
+
 }
