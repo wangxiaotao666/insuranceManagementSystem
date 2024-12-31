@@ -22,14 +22,45 @@ public class OrderListServiceImpl  implements OrderListService {
     @Autowired
 //    1
     private OrderListMapper OrderListMapper;
+
     @Override
     public List<OrderList> getorderlist() {
         List<OrderList> orderLists = OrderListMapper.getorderlist();
-        if(orderLists!=null){
+        if (orderLists != null) {
             return orderLists;
-        }else {
+        } else {
             return null;
         }
     }
-}
 
+    @Override
+    public List<OrderList> getcompensationlist() {
+        List<OrderList> compensationlists = OrderListMapper.getcompensationlist();
+        if (compensationlists != null) {
+            return compensationlists;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public int agreeCompensation(OrderList orderList) {
+        int agreeCompensation = OrderListMapper.agreeCompensation(orderList);
+        if ( agreeCompensation > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
+    @Override
+    public int disagreeCompensation(OrderList orderList) {
+        int i = OrderListMapper.disagreeCompensation(orderList);
+        if (i>0) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+}

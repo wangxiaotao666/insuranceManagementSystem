@@ -1,75 +1,189 @@
-
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-  <head>
-
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title></title>
-    
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>赔偿申请列表</title>
 	<link rel="stylesheet" type="text/css" href="/Styles/admin-all.css" />
-    <link rel="stylesheet" type="text/css" href="/Styles/base.css"/>
-    <script type="text/javascript" src="/Scripts/jquery-1.7.2.js"></script>
-    <script type="text/javascript" src="/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
-    <link rel="stylesheet" type="text/css" href="/Styles/formui.css"/>
-    <script type="text/javascript" src="/Scripts/tb.js"></script>
-    <script type="text/javascript" src="/laydate/laydate.js"></script>
+	<link rel="stylesheet" type="text/css" href="/Styles/base.css"/>
+	<script type="text/javascript" src="/Scripts/jquery-1.7.2.js"></script>
+	<script type="text/javascript" src="/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
+	<link rel="stylesheet" type="text/css" href="/Styles/formui.css"/>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<style>
+		.tb tr:hover {
+			background-color: #f5f5f5;
+			cursor: pointer;
+		}
+		.btn-mini {
+			padding: 2px 6px;
+			margin: 0 2px;
+			border-radius: 3px;
+			cursor: pointer;
+		}
+		.btn-danger {
+			background-color: #dc3545;
+			color: white;
+			border: none;
+		}
+		.btn-danger:hover {
+			background-color: #c82333;
+		}
+		.status-badge {
+			padding: 3px 8px;
+			border-radius: 12px;
+			font-size: 12px;
+		}
+		.status-completed {
+			background-color: #28a745;
+			color: white;
+		}
+		.status-pending {
+			background-color: #ffc107;
+			color: black;
+		}
+		.status-rejected {
+			background-color: #dc3545;
+			color: white;
+		}
+	</style>
+</head>
 
-	
-  </head>
+<body>
+<div class="alert alert-info" style="width:100%;">当前位置<b class="tip"></b>赔偿申请列表</div>
+<table class="tb" id="list">
+	<thead>
+	<tr>
+		<th>保险名称</th>
+		<th>保险金额</th>
+		<th>购买时间</th>
+		<th>保险人</th>
+		<th>保险状态</th>
+		<th>操作</th>
+	</tr>
+	</thead>
+	<tbody>
+	<!-- 数据将通过JavaScript动态加载 -->
+	</tbody>
+</table>
 
-  <body>
-    <div class="alert alert-info" style="width:100%;">当前位置<b class="tip"></b>赔偿申请列表</div>
-    <table class="tb" id="list">
-        <tbody>
-            <tr>
-                <th>保险名称</th>
-                <th>保险金额</th>
-                <th>购买时间</th>
-                <th>保险人</th>
-                <th>保险状态</th>
-                <th>操作</th>
-            </tr>
-            
-            		<tr class="demo">	
-            		<td>
-            			<!-- <%=ol.getOrder_name() %> -->
-            		</td>
-            		<td>
-               			<!-- <%=ol.getOrder_cost() %> -->
-                	</td>
-                	<td>
-               			<!-- <%=ol.getOrder_time() %> -->
-                	</td>
-                	<td>
-               			<!-- <%=ol.getOrder_uname() %> -->
-                	</td>
-                	<td>
-                	<!-- <%if("9".equals(ol.getOrder_state())){ %>
-                		保险已赔付
-                	<%}else{ %>
-                		保险生效中
-                	<%} %>	 -->
-                	</td>
-                	<td>
-                	<!-- <%if("9".equals(ol.getOrder_state())){ %>
-                		赔付申请已通过
-                	<%}else if("n".equals(ol.getOrder_state())){ %>
-                		赔付申请未通过
-                	<%}else{ %> -->
-                		<a href="AgreeCom!agreeCom?oid=<%=ol.getOrder_id() %>" class="btn btn-mini btn-danger" >同意</a>/
-                		<a href="DisagreeCom!disagreeCom?oid=<%=ol.getOrder_id() %>" class="btn btn-mini btn-danger" >不同意</a>
-                	</td>
-                	</tr>
-    
-        </tbody>
-    </table>
-  </body>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		loadCompensationList();
+	});
+
+	function loadCompensationList() {
+		const tbody = document.querySelector('#list tbody');
+		tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">加载中...</td></tr>';
+
+		axios.get('/orderlist/getCompensationList')
+				.then(function(response) {
+					const orders = response.data.data;
+					tbody.innerHTML = '';
+
+					if (!orders || orders.length === 0) {
+						tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">暂无赔偿申请数据</td></tr>';
+						return;
+					}
+
+					orders.forEach(order => {
+						const row = document.createElement('tr');
+						row.className = 'demo';
+						row.innerHTML = `
+                            <td>${order.order_name || '-'}</td>
+                            <td>￥${formatMoney(order.order_cost)}</td>
+                            <td>${formatDate(order.order_time)}</td>
+                            <td>${order.order_uname || '-'}</td>
+                            <td>
+                                ${getStatusBadge(order.order_state)}
+                            </td>
+                            <td>
+                                ${getActionButtons(order)}
+                            </td>
+                        `;
+						tbody.appendChild(row);
+					});
+				})
+				.catch(function(error) {
+					console.error('Error:', error);
+					tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" style="text-align:center;color:red">
+                                加载失败: ${error.message}
+                            </td>
+                        </tr>`;
+				});
+	}
+
+	function getStatusBadge(state) {
+		switch(state) {
+			case '9':
+				return '<span class="status-badge status-completed">保险已赔付</span>';
+			case 'n':
+				return '<span class="status-badge status-rejected">赔付申请未通过</span>';
+			default:
+				return '<span class="status-badge status-pending">保险生效中</span>';
+		}
+	}
+
+	function getActionButtons(order) {
+		if (order.order_state === '9') {
+			return '<span>赔付申请已通过</span>';
+		} else if (order.order_state === 'n') {
+			return '<span>赔付申请未通过</span>';
+		} else {
+			return `
+                    <button onclick="handleCompensation('${order.order_id}', true)" class="btn-mini btn-danger">同意</button>
+                    <button onclick="handleCompensation('${order.order_id}', false)" class="btn-mini btn-danger">不同意</button>
+                `;
+		}
+	}
+
+	function handleCompensation(orderId, isAgree) {
+		// 确认对话框
+		if (!confirm(isAgree ? '确定同意该赔付申请？' : '确定拒绝该赔付申请？')) {
+			return;
+		}
+
+		// 根据操作类型确定请求URL
+		const url = isAgree ? '/orderlist/agreeCompensation' : '/orderlist/disagreeCompensation';
+
+		// 发送请求到后端
+		axios.post(url, {
+			order_id: orderId
+		})
+				.then(function(response) {
+					if (response.data.code == 200) {
+						// 操作成功
+						alert(isAgree ? '赔付申请已同意' : '赔付申请已拒绝');
+						// 刷新列表
+						loadCompensationList();
+					} else {
+						// 操作失败
+						alert(response.data.msg || '操作失败');
+					}
+				})
+				.catch(function(error) {
+					console.error('Error:', error);
+					alert('操作失败，请重试');
+				});
+	}
+
+	function formatMoney(amount) {
+		return Number(amount || 0).toFixed(2);
+	}
+
+	function formatDate(dateStr) {
+		if (!dateStr) return '-';
+		const date = new Date(dateStr);
+		return date.toLocaleString('zh-CN', {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit',
+			hour: '2-digit',
+			minute: '2-digit'
+		});
+	}
+</script>
+</body>
 </html>
