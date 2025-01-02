@@ -76,7 +76,7 @@
 		const tbody = document.querySelector('#list tbody');
 		tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">加载中...</td></tr>';
 
-		axios.get('/orderlist/getCompensationList')
+		axios.get('http://localhost:8080/orderlist/getCompensationList')
 				.then(function(response) {
 					const orders = response.data.data;
 					tbody.innerHTML = '';
