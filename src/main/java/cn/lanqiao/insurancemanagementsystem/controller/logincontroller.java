@@ -33,7 +33,6 @@ public class logincontroller {
         }
 
         logger.info("Received login request for username: {}", username);
-
         UserList user = userService.findByUsername(username);
 
         if (user != null && user.getPassword().equals(password)) {
@@ -82,6 +81,7 @@ public class logincontroller {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseUtils> handleException(Exception ex) {
         logger.error("An error occurred: ", ex);
-        return new ResponseEntity<>(new ResponseUtils(500, "服务器内部错误"), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new ResponseUtils(500,
+                "服务器内部错误"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
