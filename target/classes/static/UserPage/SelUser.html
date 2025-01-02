@@ -1,98 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>更新用户信息</title>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script type="text/javascript">
+		window.onload = function () {
+			// 从 localStorage 获取登录时保存的用户信息
+			const username = localStorage.getItem('username');
+			const password = localStorage.getItem('password');
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-  <head>
-    <base href="<%=basePath%>">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title></title>
-    
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	
-	<link rel="stylesheet" type="text/css" href="/Styles/admin-all.css" />
-    <link rel="stylesheet" type="text/css" href="/Styles/base.css"/>
-    <script type="text/javascript" src="/Scripts/jquery-1.7.2.js"></script>
-    <script type="text/javascript" src="/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
-    <link rel="stylesheet" type="text/css" href=/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
-    <link rel="stylesheet" type="text/css" href="/Styles/formui.css"/>
-    <script type="text/javascript" src="/Scripts/tb.js"></script>
-    <script type="text/javascript" src="/laydate/laydate.js"></script>
-	<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
-
-  </head>
-
-  <body>
-    <div class="alert alert-info" style="width:100%;">当前位置<b class="tip"></b>修改个人信息</div>
-    <form action="UpdateUserByMe" method="post" name="myForm">
-    <table class="tb" id="list">
-        <tbody>
-            <tr>
-                <th>帐号</th>
-                <th>密码</th>
-                <th>姓名</th>
-                <th>性别</th>
-                <th>年龄</th>
-                <th>电话</th>
-                <th>联系地址</th>
-                <th>操作</th>
-            </tr>
-           		<tr class="demo">	
-           		<td>
-           			
-           			<input type="hidden" id="updd" name="userlist.username" />
-           		</td>
-           		<td>
-           			<input type="text" id="up" name="userlist.password" />
-               	</td>
-           		<td>
-           			<input type="text" id="ua" name="userlist.name" />
-               	</td>
-               	<td>
-              		<select name="userlist.sex">
-            
-              			<option value="男" selected="selected">男</option>
-              			<option value="女">女</option>
-        
-              		
-              		</select>
-               	</td>
-               	<td>
-              		<input name="userlist.age" type="text">
-               	</td>
-               	<td>
-              		<input name="userlist.phone" type="text" />
-               	</td>
-               	<td>
-              		<input name="userlist.address" type="text" />
-               	</td>
-               	<td>
-               		<input type="hidden" name="userlist.user_id" />
-               		<input type="hidden" name="userlist.type" />
-               		<input id="audit" type="submit" class="btn btn-mini btn-danger"/>
-               	</td>
-               	</tr>
-        </tbody>
-    </table>
-    </form>
-  </body>
-  <script language="javascript">
-	$(function(){
-		$("#audit").click(function(){
-			if($("#up").val() =="" ||$("#up").val() ==null){
-				alert("请填写密码！")
-				return false
-			} else if($("#ua").val() =="" ||$("#ua").val() ==null){
-				alert("请填写姓名！")
-				return false
-			} else{
-				alert("修改成功！")
+			if (!username || !password) {
+				alert('请先登录！');
+				window.location.href = '/Login.html';
+				return;
 			}
-	    })
-	})
+
+			// 获取用户信息
+			axios.get('/tAdmin/getUserInfo', {
+				params: {
+					username: username,
+					password: password
+				}
+			})
+			.then(response => {
+				if (response.data.code === 200) {
+					const userData = response.data.data;
+					// 填充表单字段
+					document.getElementById('updd').value = userData.username;
+					document.getElementById('up').value = userData.password;
+					document.getElementById('ua').value = userData.name;
+					document.getElementById('sex').value = userData.sex;
+					document.getElementById('age').value = userData.age;
+					document.getElementById('phone').value = userData.phone;
+					document.getElementById('address').value = userData.address;
+				} else {
+					alert(response.data.msg);
+				}
+			})
+			.catch(error => {
+				console.error('获取用户数据失败:', error);
+				alert('获取用户信息失败');
+			});
+		};
+
+		// 提交表单
+		function submitForm(event) {
+			event.preventDefault();
+
+			const updateData = {
+				username: document.getElementById('updd').value,
+				password: document.getElementById('up').value,
+				name: document.getElementById('ua').value,
+				sex: document.getElementById('sex').value,
+				age: document.getElementById('age').value,
+				phone: document.getElementById('phone').value,
+				address: document.getElementById('address').value
+			};
+
+			// 发送更新请求
+			axios.post('/tAdmin/updateUserInfo', updateData)
+				.then(response => {
+					if (response.data.code === 200) {
+						alert('用户信息更新成功!');
+						// 更新本地存储的密码
+						localStorage.setItem('password', updateData.password);
+					} else {
+						alert(response.data.msg);
+					}
+				})
+				.catch(error => {
+					console.error('更新失败:', error);
+					alert('更新失败, 请稍后重试!');
+				});
+		}
 	</script>
+</head>
+<body>
+<h1>更新个人信息</h1>
+<form action="UpdateUserByMe" method="post" name="myForm" onsubmit="submitForm(event)">
+	<table class="tb" id="list">
+		<tbody>
+		<tr>
+			<th>帐号</th>
+			<th>密码</th>
+			<th>姓名</th>
+			<th>性别</th>
+			<th>年龄</th>
+			<th>电话</th>
+			<th>联系地址</th>
+			<th>操作</th>
+		</tr>
+		<tr class="demo">
+			<td><input type="hidden" id="updd" name="userlist.username" /></td>
+			<td><input type="text" id="up" name="userlist.password" /></td>
+			<td><input type="text" id="ua" name="userlist.name" /></td>
+			<td>
+				<select name="userlist.sex" id="sex">
+					<option value="男" selected="selected">男</option>
+					<option value="女">女</option>
+				</select>
+			</td>
+			<td><input name="userlist.age" type="text" id="age" /></td>
+			<td><input name="userlist.phone" type="text" id="phone" /></td>
+			<td><input name="userlist.address" type="text" id="address" /></td>
+			<td><input type="submit" id="audit" class="btn btn-mini btn-danger" value="更新信息" /></td>
+		</tr>
+		</tbody>
+	</table>
+</form>
+</body>
 </html>

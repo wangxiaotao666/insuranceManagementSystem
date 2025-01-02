@@ -27,4 +27,26 @@ public class UserIndemnityServiceImpl implements UserIndemnityService {
             return null;
         }
     }
+
+    @Override
+
+    public boolean applyPayment(String orderId, String productId) {
+
+        try {
+
+            // 更新订单状态为申请赔付（状态码2）
+
+            int result = userIndemnityMapper.updateOrderState(orderId, productId);
+
+            return result > 0;
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return false;
+
+        }
+
+    }
 }
