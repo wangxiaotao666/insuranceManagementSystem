@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class logincontroller {
 
     private static final Logger logger = LoggerFactory.getLogger(logincontroller.class);
-//1323
+    //1323
     // 依赖注入
     @Autowired
     private UserService userService;
