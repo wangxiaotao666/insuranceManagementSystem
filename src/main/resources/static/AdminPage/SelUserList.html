@@ -1,79 +1,77 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-	<!-- ... 其他 head 内容保持不变 ... -->
-	<script type="text/javascript">
-		// 页面加载时获取当前用户信息
-		window.onload = function () {
-			// 从 localStorage 获取登录时保存的用户信息
-			const username = localStorage.getItem('username');
-			const password = localStorage.getItem('password');
 
-			if (!username || !password) {
-				alert('请先登录！');
-				window.location.href = '/login.html';
-				return;
-			}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+<!--    <base href="<%=basePath%>">-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+    
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	
+	<link rel="stylesheet" type="text/css" href="/Styles/admin-all.css" />
+    <link rel="stylesheet" type="text/css" href="/Styles/base.css"/>
+    <script type="text/javascript" src="/Scripts/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
+    <link rel="stylesheet" type="text/css" href="/Styles/formui.css"/>
+    <script type="text/javascript" src="/Scripts/tb.js"></script>
+    <script type="text/javascript" src="/laydate/laydate.js"></script>
+	
+<!--	<link rel="stylesheet" type="text/css" href="styles.css">-->
+	<link rel="stylesheet" type="text/css" href="/Styles/ui-all/">
 
-			// 获取用户信息
-			axios.get('/userUpdate/getUserInfo', {
-				params: {
-					username: username,
-					password: password
-				}
-			})
-					.then(response => {
-						if (response.data) {
-							const userData = response.data;
-							console.log('获取到的用户数据:', userData); // 添加调试日志
-							// 填充表单字段
-							document.getElementById('user_id').value = userData.user_id || '';
-							document.getElementById('username').value = userData.username;
-							document.getElementById('password').value = userData.password;
-							document.getElementById('name').value = userData.name;
-							document.getElementById('sex').value = userData.sex;
-							document.getElementById('age').value = userData.age;
-							document.getElementById('phone').value = userData.phone;
-							document.getElementById('address').value = userData.address;
-							document.getElementById('type').value = userData.type || '';
-						} else {
-							alert('获取用户信息失败');
-						}
-					})
-					.catch(error => {
-						console.error('获取用户数据失败:', error);
-						alert('获取用户信息失败: ' + error.message);
-					});
-		};
+	
+	
+  </head>
 
-		// 提交表单
-		function submitForm(event) {
-			event.preventDefault();
-
-			const updateData = {
-				user_id: document.getElementById('user_id').value,
-				username: document.getElementById('username').value,
-				password: document.getElementById('password').value,
-				name: document.getElementById('name').value,
-				sex: document.getElementById('sex').value,
-				age: document.getElementById('age').value,
-				phone: document.getElementById('phone').value,
-				address: document.getElementById('address').value,
-				type: document.getElementById('type').value
-			};
-
-			// 发送更新请求
-			axios.post('/userUpdate/updateUserInfo', updateData)
-					.then(response => {
-						alert('用户信息更新成功!');
-						localStorage.setItem('password', updateData.password);
-					})
-					.catch(error => {
-						console.error('更新失败:', error);
-						alert('更新失败: ' + error.message);
-					});
-		}
-	</script>
-</head>
-<!-- ... body 部分保持不变 ... -->
+  <body>
+    <div class="alert alert-info" style="width:100%;">当前位置<b class="tip"></b>用户列表</div>
+    <table class="tb" id="list">
+        <tbody>
+            <tr>
+                <th>帐号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>年龄</th>
+                <th>电话</th>
+                <th>联系地址</th>
+                <th>操作</th>
+            </tr>
+            	<!-- <%if(ulist != null){
+            		if(!ulist.isEmpty()){
+            			for(UserList ul : ulist){ %> -->
+            		<tr class="demo">	
+            		<td>
+            			<!-- <%=ul.getUsername() %> -->
+            		</td>
+            		<td>
+               			<!-- <%=ul.getName() %> -->
+                	</td>
+                	<td>
+               			<!-- <%=ul.getSex() %> -->
+                	</td>
+                	<td>
+               			<!-- <%=ul.getAge() %> -->
+                	</td>
+                	<td>
+               			<!-- <%=ul.getPhone() %> -->
+                	</td>
+                	<td>
+               			<!-- <%=ul.getAddress() %> -->
+                	</td>
+                	<td>
+						<!-- SelUser!selUser?uid=<%=ul.getUser_id() %> -->
+						<!-- DelUser!delUser?uid=<%=ul.getUser_id() %> -->
+                		<a href="/AdminPage/SelUser.html" class="btn btn-mini btn-danger" >修改</a>/
+                		<a href="DelUser!delUser?uid=<%=ul.getUser_id() %>" class="btn btn-mini btn-danger" >删除</a>
+                	</td>
+                	</tr>
+        
+        </tbody>
+    </table>
+  </body>
 </html>
