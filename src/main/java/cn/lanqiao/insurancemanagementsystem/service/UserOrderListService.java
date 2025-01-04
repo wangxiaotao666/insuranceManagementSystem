@@ -1,0 +1,17 @@
+package cn.lanqiao.insurancemanagementsystem.service;
+
+import cn.lanqiao.insurancemanagementsystem.model.pojo.OrderList;
+
+import java.util.List;
+
+public interface UserOrderListService {
+    //   查询用户个人订单列表
+    // 获取用户订单列表
+    List<OrderList> getOrderList(String userId);
+
+    // 确认支付
+    boolean confirmPayment(String orderId, String productId);
+
+    // 取消订单
+    boolean cancelOrder(String orderId, String productId);
+}

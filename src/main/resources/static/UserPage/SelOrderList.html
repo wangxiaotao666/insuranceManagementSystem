@@ -1,17 +1,16 @@
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
     <base href="<%=basePath%>">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title></title>
-    
+    <title>个人订单列表</title>
+
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="expires" content="0">
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	
+
 	<link rel="stylesheet" type="text/css" href="/Styles/admin-all.css" />
     <link rel="stylesheet" type="text/css" href="/Styles/base.css"/>
     <script type="text/javascript" src="/Scripts/jquery-1.7.2.js"></script>
@@ -20,10 +19,11 @@
     <link rel="stylesheet" type="text/css" href="/Styles/formui.css"/>
     <script type="text/javascript" src="/Scripts/tb.js"></script>
     <script type="text/javascript" src="/laydate/laydate.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
-	
+
   </head>
 
   <body>
@@ -38,38 +38,145 @@
                 <th>订单状态</th>
                 <th>操作</th>
             </tr>
-            	
-            		<tr class="demo">	
-            		<td>
-            			<!-- <%=ol.getOrder_name() %> -->
-            		</td>
-            		<td>
-               			<!-- <%=ol.getOrder_cost() %> -->
-                	</td>
-                	<td>
-               			<!-- <%=ol.getOrder_time() %> -->
-                	</td>
-                	<td>
-               			<!-- <%=ol.getOrder_uname() %> -->
-                	</td>
-                	<td>
-                	<!-- <%if("0".equals(ol.getOrder_state())){ %>
-                		订单未确认
-                	<%}else{ %>
-                		订单已完成
-                	<%} %>	 -->
-                	</td>
-                	<td>
-                	<!-- <%if("0".equals(ol.getOrder_state())){ %>
-                		<a href="QrOrder!qrOrder?oid=<%=ol.getOrder_id() %>&pid=<%="" %>" class="btn btn-mini btn-danger" >确认支付</a>/
-                		<a href="DelOrder!delOrder?oid=<%=ol.getOrder_id() %>&pid=<%="" %>" class="btn btn-mini btn-danger" >取消订单</a>
-                	<%}else{ %>
-                		订单已完成
-                	<%} %>	 -->
-                	</td>
-                	</tr>
-         
+            <tbody id="orderList">
+                <!-- 订单数据将动态插入这里 -->
+            </tbody>
         </tbody>
     </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查cookie
+            console.log('当前cookies:', document.cookie);
+            
+            axios.get('http://localhost:8080/userOrderList/getOrderList', {
+                withCredentials: true  // 确保发送 Cookie
+            })
+            .then(response => {
+                console.log('完整响应:', response);
+                console.log('服务器响应:', response.data);
+                if (response.data.code === 200) {
+                    const orderList = response.data.data;
+                    const orderTableBody = document.getElementById('orderList');
+                    
+                    // 清空现有内容
+                    orderTableBody.innerHTML = '';
+
+                    // 渲染订单列表
+                    orderList.forEach(order => {
+                        const row = document.createElement('tr');
+                        row.className = 'demo';
+
+                        // 订单名称
+                        const nameCell = document.createElement('td');
+                        nameCell.textContent = order.order_name || '';
+                        row.appendChild(nameCell);
+
+                        // 订单金额
+                        const costCell = document.createElement('td');
+                        costCell.textContent = order.order_cost || '';
+                        row.appendChild(costCell);
+
+                        // 订单时间
+                        const timeCell = document.createElement('td');
+                        timeCell.textContent = order.order_time || '';
+                        row.appendChild(timeCell);
+
+                        // 订单人
+                        const unameCell = document.createElement('td');
+                        unameCell.textContent = order.order_uname || '';
+                        row.appendChild(unameCell);
+
+                        // 订单状态
+                        const stateCell = document.createElement('td');
+                        stateCell.textContent = order.order_state === "0" ? "订单未确认" : "订单已完成";
+                        row.appendChild(stateCell);
+
+                        // 操作按钮
+                        const actionCell = document.createElement('td');
+                        if (order.order_state === "0") {
+                            const confirmButton = document.createElement('button');
+                            confirmButton.textContent = "确认支付";
+                            confirmButton.className = "btn btn-mini btn-danger";
+                            confirmButton.onclick = () => handleConfirmPayment(order.order_id, order.product_id);
+                            
+                            const cancelButton = document.createElement('button');
+                            cancelButton.textContent = "取消订单";
+                            cancelButton.className = "btn btn-mini btn-danger";
+                            cancelButton.onclick = () => handleCancelOrder(order.order_id, order.product_id);
+                            
+                            actionCell.appendChild(confirmButton);
+                            actionCell.appendChild(document.createTextNode(' / '));
+                            actionCell.appendChild(cancelButton);
+                        } else {
+                            actionCell.textContent = "订单已完成";
+                        }
+                        row.appendChild(actionCell);
+
+                        orderTableBody.appendChild(row);
+                    });
+                } else {
+                    alert(response.data.msg);
+                }
+            })
+            .catch(error => {
+                console.error('详细错误信息:', error);
+                if (error.response) {
+                    console.error('错误响应:', error.response.data);
+                }
+                alert('获取订单列表失败，请稍后重试');
+            });
+        });
+
+        // 处理确认支付
+        function handleConfirmPayment(orderId, productId) {
+            axios.post('http://localhost:8080/userOrderList/confirmPayment', {
+                order_id: orderId,
+                product_id: productId
+            }, {
+                withCredentials: true  // 允许发送 Cookie
+            })
+            .then(response => {
+                if (response.data.code === 200) {
+                    alert('支付成功！');
+                    location.reload(); // 刷新页面
+                } else {
+                    alert('支付失败: ' + response.data.msg);
+                }
+            })
+            .catch(error => {
+                console.error('支付失败:', error);
+                alert('支付失败，请稍后重试');
+            });
+        }
+
+        // 处理取消订单
+        function handleCancelOrder(orderId, productId) {
+            if (confirm('确定要取消该订单吗？')) {
+                axios.post('http://localhost:8080/userOrderList/cancelOrder', {
+                    order_id: orderId,
+                    product_id: productId
+                }, {
+                    withCredentials: true  // 允许发送 Cookie
+                })
+                .then(response => {
+                    if (response.data.code === 200) {
+                        alert('订单已取消！');
+                        location.reload(); // 刷新页面
+                    } else {
+                        alert('取消失败: ' + response.data.msg);
+                    }
+                })
+                .catch(error => {
+                    console.error('取消失败:', error);
+                    alert('取消失败，请稍后重试');
+                });
+            }
+        }
+    </script>
   </body>
 </html>
+<!--第一步：前端发送请求应该使用什么技术 axios(AJAX)-->
+<script src="../js/axios.min.js"></script>
+
+<!--第二步:通过axios发送前端请求到服务器(后端)-->
