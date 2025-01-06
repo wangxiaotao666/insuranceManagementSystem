@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserOrderListService {
     // 获取用户订单列表
-    List<OrderList> getOrderList(String userId);
+    List<OrderList> getOrderList(String username);
 //
 //    // 确认支付 没有
 //    boolean confirmPayment(String orderId, String productId);

@@ -4,6 +4,8 @@ package cn.lanqiao.insurancemanagementsystem.controller;
 import cn.lanqiao.insurancemanagementsystem.model.pojo.OrderList;
 import cn.lanqiao.insurancemanagementsystem.service.impl.UserIndemnityServiceImpl;
 import cn.lanqiao.insurancemanagementsystem.utils.ResponseUtils;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,19 +22,34 @@ public class UserIndemnityController {
     @Autowired
     UserIndemnityServiceImpl userIndemnityService;
     @RequestMapping("/getList")
-    public ResponseUtils getList(){
+    public ResponseUtils getUserOrderList(HttpServletRequest request) {
         try {
-            List<OrderList> list=userIndemnityService.getIndemnityList();
-            if (list==null){
-                return new ResponseUtils(500,"数据查询失败");
-            }else {
-                return new ResponseUtils(200,"数据查询成功",list);
+            Cookie[] cookies = request.getCookies();
+            if (cookies == null) {
+                return new ResponseUtils(401, "请先登录");
+            }
+            String name = null;
+            for (Cookie cookie : cookies) {
+                if ("name".equals(cookie.getName())) {
+                    name = cookie.getValue();
+                    break;
+                }
+            }
+            if (name == null) {
+                return new ResponseUtils(401, "请先登录");
+            }
+            List<OrderList> list = userIndemnityService.getIndemnityList(name);
+            if (list != null) {
+                return new ResponseUtils(200, "查询成功", list);
+            } else {
+                System.out.println("查询失败");
+                return new ResponseUtils(500, "查询失败");
             }
         } catch (Exception e) {
-            return new ResponseUtils(400,"数据查询异常");
+            e.printStackTrace();
+            return new ResponseUtils(400, "查询异常: " + e.getMessage());
         }
     }
-
     @PostMapping("/applyPayment")
     public ResponseUtils applyPayment(@RequestBody Map<String, String> params) {
         try {

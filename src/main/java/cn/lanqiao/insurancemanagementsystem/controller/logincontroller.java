@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class logincontroller {
 
     private static final Logger logger = LoggerFactory.getLogger(logincontroller.class);
-
+    //1323
+    // 依赖注入
     @Autowired
     private UserService userService;
 
@@ -36,25 +37,24 @@ public class logincontroller {
 
         if (user != null && user.getPassword().equals(password)) {
             logger.info("Login successful for username: {}", username);
-            // 设置用户名的cookie
-            Cookie usernameCookie = new Cookie("username", username);
-            usernameCookie.setPath("/");
-            response.addCookie(usernameCookie);
+            Cookie cookie1 = new Cookie("name",user.getName());
 
-            // 设置用户姓名的cookie
-            Cookie nameCookie = new Cookie("name", user.getName());
-            nameCookie.setPath("/");
-            response.addCookie(nameCookie);
+            // 设置cookie的存活时间123
+            cookie1.setMaxAge(60 * 60 * 24);
+            // 设置cookie的路径，使其在整个应用中可用
+            cookie1.setPath("/");
+            response.addCookie(cookie1);
 
             // 登录成功，返回用户类型
             return new ResponseEntity<>(new ResponseUtils(200, "登录成功", user.getType()), HttpStatus.OK);
         } else {
             logger.warn("Login failed for username: {}. Invalid credentials.", username);
+            // 登录失败
             return new ResponseEntity<>(new ResponseUtils(401, "用户名或密码错误"), HttpStatus.UNAUTHORIZED);
         }
     }
 
-    // 定义请求对象
+    // 定义一个简单的请求对象来接收 JSON 数据
     public static class LoginRequest {
         private String username;
         private String password;

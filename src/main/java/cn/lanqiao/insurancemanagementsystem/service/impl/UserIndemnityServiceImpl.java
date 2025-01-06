@@ -18,12 +18,13 @@ public class UserIndemnityServiceImpl implements UserIndemnityService {
     @Autowired
     private UserIndemnityMapper userIndemnityMapper;
     @Override
-    public List<OrderList> getIndemnityList() {
+    public List<OrderList> getIndemnityList(String name) {
 //        System.out.println(9999);
-        List<OrderList> tAdmins = userIndemnityMapper.getIndemnityList();
-        if(tAdmins!=null){
-            return tAdmins;
-        }else{
+        try {
+            // 直接使用用户名查询订单  111
+            return userIndemnityMapper.getIndemnityList(name);
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

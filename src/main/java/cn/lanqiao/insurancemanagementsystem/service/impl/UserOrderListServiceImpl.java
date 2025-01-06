@@ -1,6 +1,5 @@
 package cn.lanqiao.insurancemanagementsystem.service.impl;
 
-import cn.lanqiao.insurancemanagementsystem.mapper.UserIndemnityMapper;
 import cn.lanqiao.insurancemanagementsystem.mapper.UserOrderListMapper;
 import cn.lanqiao.insurancemanagementsystem.model.pojo.OrderList;
 import cn.lanqiao.insurancemanagementsystem.service.UserOrderListService;
