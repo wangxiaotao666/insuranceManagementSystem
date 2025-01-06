@@ -1,8 +1,8 @@
 package cn.lanqiao.insurancemanagementsystem.service.impl;
 
-import cn.lanqiao.insurancemanagementsystem.mapper.OrderListMapper;
+import cn.lanqiao.insurancemanagementsystem.mapper.TAdminOrderListMapper;
 import cn.lanqiao.insurancemanagementsystem.model.pojo.OrderList;
-import cn.lanqiao.insurancemanagementsystem.service.OrderListService;
+import cn.lanqiao.insurancemanagementsystem.service.TAdminOrderListService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,10 @@ import java.util.List;
  * @since 2024-12-23
  */
 @Service
-public class OrderListServiceImpl  implements OrderListService {
+public class TAdminOrderListServiceImpl implements TAdminOrderListService {
     @Autowired
 //    1
-    private OrderListMapper OrderListMapper;
+    private TAdminOrderListMapper OrderListMapper;
 
     @Override
     public List<OrderList> getorderlist() {

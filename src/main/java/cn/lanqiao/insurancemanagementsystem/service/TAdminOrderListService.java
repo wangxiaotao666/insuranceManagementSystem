@@ -13,10 +13,10 @@ import java.util.List;
  * @author author
  * @since 2024-12-23
  */
-public interface OrderListService {
+public interface TAdminOrderListService {
     List<OrderList> getorderlist();
 //查询赔偿申请列表
-List<OrderList> getcompensationlist();
+   List<OrderList> getcompensationlist();
     // 同意赔付申请
     int agreeCompensation(OrderList orderList);
 

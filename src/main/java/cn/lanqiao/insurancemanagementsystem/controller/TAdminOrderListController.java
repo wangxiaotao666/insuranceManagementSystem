@@ -2,10 +2,9 @@ package cn.lanqiao.insurancemanagementsystem.controller;
 
 
 import cn.lanqiao.insurancemanagementsystem.model.pojo.OrderList;
-import cn.lanqiao.insurancemanagementsystem.service.impl.OrderListServiceImpl;
+import cn.lanqiao.insurancemanagementsystem.service.impl.TAdminOrderListServiceImpl;
 import cn.lanqiao.insurancemanagementsystem.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -23,9 +22,9 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/orderlist")
-public class OrderListController {
+public class TAdminOrderListController {
     @Autowired
-    private OrderListServiceImpl orderListService;
+    private TAdminOrderListServiceImpl orderListService;
     @RequestMapping("/getOrderList")
     public ResponseUtils getOrderList(){
         try{
@@ -59,7 +58,7 @@ public class OrderListController {
             return new ResponseUtils(400, "管理员查询异常");
         }
     }
-    @PostMapping("/agreeCompensation")
+    @RequestMapping("/agreeCompensation")
 public ResponseUtils agreeCompensation(@RequestBody OrderList orderList) {
     try {
         int result = orderListService.agreeCompensation(orderList);
@@ -73,7 +72,7 @@ public ResponseUtils agreeCompensation(@RequestBody OrderList orderList) {
         return new ResponseUtils(400, "处理异常");
     }
 }
-@RequestMapping("/disagreeCompensation")
+  @RequestMapping("/disagreeCompensation")
 public ResponseUtils disagreeCompensation(@RequestBody OrderList orderList) {
     try {
         int result = orderListService.disagreeCompensation(orderList);
