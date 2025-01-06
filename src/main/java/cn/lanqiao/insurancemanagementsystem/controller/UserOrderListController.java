@@ -22,7 +22,6 @@ public class UserOrderListController {
     public ResponseUtils getList(HttpServletRequest request) {
         try {
             Cookie[] cookies = request.getCookies();
-//            System.out.println("收到请求，检查cookies");
             
             if (cookies == null) {
                 System.out.println("没有找到任何cookie");

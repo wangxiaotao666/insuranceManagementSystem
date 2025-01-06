@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Update;
 import java.util.List;
 
 public interface UserOrderListMapper {
-    //   查询用户个人订单列表
     // 获取用户订单列表  根据user_list表中的username来查order_list表中的数据
     @Select("select * from order_list where order_uname = #{name}")
     List<OrderList> getOrderList(String name);
