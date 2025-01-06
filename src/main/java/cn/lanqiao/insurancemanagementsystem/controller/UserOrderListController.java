@@ -29,7 +29,7 @@ public class UserOrderListController {
                 return new ResponseUtils(401, "请先登录");
             }
 
-            String username = null;
+//            String username = null;
             String name = null;
             for (Cookie cookie : cookies) {
 //                System.out.println("发现cookie: " + cookie.getName() + "=" + cookie.getValue());
@@ -48,7 +48,7 @@ public class UserOrderListController {
             List<OrderList> list = userOrderListService.getOrderList(name);
             
             if (list != null) {
-                System.out.println("查询成功，找到 " + list.size() + " 条订单");
+//                System.out.println("查询成功，找到 " + list.size() + " 条订单");
                 return new ResponseUtils(200, "查询成功", list);
             } else {
                 System.out.println("查询失败");
@@ -59,38 +59,38 @@ public class UserOrderListController {
             return new ResponseUtils(400, "查询异常: " + e.getMessage());
         }
     }
+//
+//    @PostMapping("/confirmPayment")
+//    public ResponseUtils confirmPayment(@RequestBody Map<String, String> params) {
+//        try {
+//            String orderId = params.get("order_id");
+//            String productId = params.get("product_id");
+//            boolean success = userOrderListService.confirmPayment(orderId, productId);
+//
+//            if (success) {
+//                return new ResponseUtils(200, "支付成功");
+//            } else {
+//                return new ResponseUtils(500, "支付失败");
+//            }
+//        } catch (Exception e) {
+//            return new ResponseUtils(400, "支付处理异常: " + e.getMessage());
+//        }
+//    }
 
-    @PostMapping("/confirmPayment")
-    public ResponseUtils confirmPayment(@RequestBody Map<String, String> params) {
-        try {
-            String orderId = params.get("order_id");
-            String productId = params.get("product_id");
-            boolean success = userOrderListService.confirmPayment(orderId, productId);
-
-            if (success) {
-                return new ResponseUtils(200, "支付成功");
-            } else {
-                return new ResponseUtils(500, "支付失败");
-            }
-        } catch (Exception e) {
-            return new ResponseUtils(400, "支付处理异常: " + e.getMessage());
-        }
-    }
-
-    @PostMapping("/cancelOrder")
-    public ResponseUtils cancelOrder(@RequestBody Map<String, String> params) {
-        try {
-            String orderId = params.get("order_id");
-            String productId = params.get("product_id");
-            boolean success = userOrderListService.cancelOrder(orderId, productId);
-
-            if (success) {
-                return new ResponseUtils(200, "订单取消成功");
-            } else {
-                return new ResponseUtils(500, "订单取消失败");
-            }
-        } catch (Exception e) {
-            return new ResponseUtils(400, "订单取消异常: " + e.getMessage());
-        }
-    }
+//    @PostMapping("/cancelOrder")
+//    public ResponseUtils cancelOrder(@RequestBody Map<String, String> params) {
+//        try {
+//            String orderId = params.get("order_id");
+//            String productId = params.get("product_id");
+//            boolean success = userOrderListService.cancelOrder(orderId, productId);
+//
+//            if (success) {
+//                return new ResponseUtils(200, "订单取消成功");
+//            } else {
+//                return new ResponseUtils(500, "订单取消失败");
+//            }
+//        } catch (Exception e) {
+//            return new ResponseUtils(400, "订单取消异常: " + e.getMessage());
+//        }
+//    }
 }

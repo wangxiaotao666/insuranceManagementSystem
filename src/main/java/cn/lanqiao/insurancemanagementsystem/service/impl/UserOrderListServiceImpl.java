@@ -27,27 +27,27 @@ public class UserOrderListServiceImpl implements UserOrderListService {
             return null;
         }
     }
-
-    @Override
-    public boolean confirmPayment(String orderId, String productId) {
-        try {
-            int result = userOrderListMapper.updateOrderState(orderId, productId, "1");
-            return result > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public boolean cancelOrder(String orderId, String productId) {
-        try {
-            int result = userOrderListMapper.deleteOrder(orderId, productId);
-            return result > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+//状态
+//    @Override
+//    public boolean confirmPayment(String orderId, String productId) {
+//        try {
+//            int result = userOrderListMapper.updateOrderState(orderId, productId, "1");
+//            return result > 0;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
+//操作
+//    @Override
+//    public boolean cancelOrder(String orderId, String productId) {
+//        try {
+//            int result = userOrderListMapper.deleteOrder(orderId, productId);
+//            return result > 0;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 }
 

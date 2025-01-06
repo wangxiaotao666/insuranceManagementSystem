@@ -8,10 +8,10 @@ public interface UserOrderListService {
     //   查询用户个人订单列表
     // 获取用户订单列表
     List<OrderList> getOrderList(String userId);
-
-    // 确认支付
-    boolean confirmPayment(String orderId, String productId);
-
-    // 取消订单
-    boolean cancelOrder(String orderId, String productId);
+//
+//    // 确认支付 没有
+//    boolean confirmPayment(String orderId, String productId);
+//
+//    // 取消订单 没有
+//    boolean cancelOrder(String orderId, String productId);
 }
