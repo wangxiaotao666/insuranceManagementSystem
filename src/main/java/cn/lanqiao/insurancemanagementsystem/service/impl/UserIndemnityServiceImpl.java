@@ -19,7 +19,7 @@ public class UserIndemnityServiceImpl implements UserIndemnityService {
     private UserIndemnityMapper userIndemnityMapper;
     @Override
     public List<OrderList> getIndemnityList(String name) {
-//        System.out.println(9999);
+//        System.out.println(9999);111
         try {
             // 直接使用用户名查询订单  111
             return userIndemnityMapper.getIndemnityList(name);

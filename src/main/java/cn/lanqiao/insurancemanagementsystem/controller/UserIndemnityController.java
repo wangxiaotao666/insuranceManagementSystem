@@ -18,7 +18,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/userIndemnity")
 public class UserIndemnityController {
-    //个人申请赔偿列表
+    //个人申请赔偿列表111
     @Autowired
     UserIndemnityServiceImpl userIndemnityService;
     @RequestMapping("/getList")

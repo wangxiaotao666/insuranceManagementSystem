@@ -22,32 +22,24 @@ public class UserOrderListController {
     public ResponseUtils getList(HttpServletRequest request) {
         try {
             Cookie[] cookies = request.getCookies();
-            
             if (cookies == null) {
                 System.out.println("没有找到任何cookie");
                 return new ResponseUtils(401, "请先登录");
             }
-
-//            String username = null;
             String name = null;
             for (Cookie cookie : cookies) {
-//                System.out.println("发现cookie: " + cookie.getName() + "=" + cookie.getValue());
                 if ("name".equals(cookie.getName())) {
                     name = cookie.getValue();
                     break;
                 }
             }
-
             if (name == null) {
                 System.out.println("没有找到name cookie");
                 return new ResponseUtils(401, "请先登录");
             }
-
-//            System.out.println("使用用户名查询订单: " + name);
             List<OrderList> list = userOrderListService.getOrderList(name);
             
             if (list != null) {
-//                System.out.println("查询成功，找到 " + list.size() + " 条订单");
                 return new ResponseUtils(200, "查询成功", list);
             } else {
                 System.out.println("查询失败");

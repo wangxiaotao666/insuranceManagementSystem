@@ -5,7 +5,7 @@ import cn.lanqiao.insurancemanagementsystem.model.pojo.OrderList;
 import java.util.List;
 
 public interface UserOrderListService {
-    // 获取用户订单列表
+    // 获取用户订单列表1
     List<OrderList> getOrderList(String username);
 //
 //    // 确认支付 没有

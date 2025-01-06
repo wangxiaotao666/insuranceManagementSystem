@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Update;
 import java.util.List;
 
 public interface UserIndemnityMapper {
-    //   查询个人申请赔偿列表
+    //   查询个人申请赔偿列表111
     @Select("select * from order_list where order_uname = #{name}")
     List<OrderList> getIndemnityList(String name);
     // 更新订单状态为申请赔付
