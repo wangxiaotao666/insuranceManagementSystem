@@ -24,7 +24,7 @@ public interface TAdminMapper {
     /**
      * 注册功能
      */
-    @Insert("insert into user_list values (null,#{username},#{password},#{nickname},#{sex},#{age},#{phone},#{address},0)")
+    @Insert("insert into user_list values (null,#{username},#{password},#{nickname},#{sex},#{age},#{phone},#{address},0,0)")
     int register(TAdmin tAdmin);
     //注册查询用户名是否重复
     @Select("select * from user_list where username = #{username} ")
