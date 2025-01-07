@@ -36,7 +36,6 @@
                 <th>订单时间</th>
                 <th>订单人</th>
                 <th>订单状态</th>
-                <th>操作</th>
             </tr>
             <tbody id="orderList">
                 <!-- 订单数据将动态插入这里  -->
@@ -92,31 +91,8 @@
                         stateCell.textContent = order.order_state === "0" ? "订单未确认" : "订单已完成";
                         row.appendChild(stateCell);
 
-                        // 操作按钮
-                        const actionCell = document.createElement('td');
-                        if (order.order_state === "0") {
-                            const confirmButton = document.createElement('button');
-                            confirmButton.textContent = "确认支付";
-                            confirmButton.className = "btn btn-mini btn-danger";
-                            confirmButton.onclick = () => handleConfirmPayment(order.order_id, order.product_id);
-                            
-                            const cancelButton = document.createElement('button');
-                            cancelButton.textContent = "取消订单";
-                            cancelButton.className = "btn btn-mini btn-danger";
-                            cancelButton.onclick = () => handleCancelOrder(order.order_id, order.product_id);
-                            
-                            actionCell.appendChild(confirmButton);
-                            actionCell.appendChild(document.createTextNode(' / '));
-                            actionCell.appendChild(cancelButton);
-                        } else {
-                            actionCell.textContent = "订单已完成";
-                        }
-                        row.appendChild(actionCell);
-
                         orderTableBody.appendChild(row);
                     });
-                } else {
-                    alert(response.data.msg);
                 }
             })
             .catch(error => {
@@ -128,51 +104,6 @@
             });
         });
 
-        // 处理确认支付
-        function handleConfirmPayment(orderId, productId) {
-            axios.post('http://localhost:8080/userOrderList/confirmPayment', {
-                order_id: orderId,
-                product_id: productId
-            }, {
-                withCredentials: true  // 允许发送 Cookie
-            })
-            .then(response => {
-                if (response.data.code === 200) {
-                    alert('支付成功！');
-                    location.reload(); // 刷新页面
-                } else {
-                    alert('支付失败: ' + response.data.msg);
-                }
-            })
-            .catch(error => {
-                console.error('支付失败:', error);
-                alert('支付失败，请稍后重试');
-            });
-        }
-
-        // 处理取消订单
-        function handleCancelOrder(orderId, productId) {
-            if (confirm('确定要取消该订单吗？')) {
-                axios.post('http://localhost:8080/userOrderList/cancelOrder', {
-                    order_id: orderId,
-                    product_id: productId
-                }, {
-                    withCredentials: true  // 允许发送 Cookie
-                })
-                .then(response => {
-                    if (response.data.code === 200) {
-                        alert('订单已取消！');
-                        location.reload(); // 刷新页面
-                    } else {
-                        alert('取消失败: ' + response.data.msg);
-                    }
-                })
-                .catch(error => {
-                    console.error('取消失败:', error);
-                    alert('取消失败，请稍后重试');
-                });
-            }
-        }
     </script>
   </body>
 </html>
