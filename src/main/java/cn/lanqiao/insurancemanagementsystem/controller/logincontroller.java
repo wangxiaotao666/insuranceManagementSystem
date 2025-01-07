@@ -37,13 +37,22 @@ public class logincontroller {
 
         if (user != null && user.getPassword().equals(password)) {
             logger.info("Login successful for username: {}", username);
-            Cookie cookie1 = new Cookie("name",user.getName());
 
-            // 设置cookie的存活时间123
-            cookie1.setMaxAge(60 * 60 * 24);
-            // 设置cookie的路径，使其在整个应用中可用
-            cookie1.setPath("/");
-            response.addCookie(cookie1);
+            if(user.getName().equals("管理员")){
+                Cookie cookie = new Cookie("AdminName",user.getName());
+                // 设置cookie的存活时间123
+                cookie.setMaxAge(60 * 60 * 24);
+                // 设置cookie的路径，使其在整个应用中可用
+                cookie.setPath("/");
+                response.addCookie(cookie);
+            }else{
+                Cookie cookie1 = new Cookie("name",user.getName());
+                // 设置cookie的存活时间123
+                cookie1.setMaxAge(60 * 60 * 24);
+                // 设置cookie的路径，使其在整个应用中可用
+                cookie1.setPath("/");
+                response.addCookie(cookie1);
+            }
 
             // 登录成功，返回用户类型
             return new ResponseEntity<>(new ResponseUtils(200, "登录成功", user.getType()), HttpStatus.OK);

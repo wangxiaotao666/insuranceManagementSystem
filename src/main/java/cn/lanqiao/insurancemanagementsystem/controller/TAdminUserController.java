@@ -41,13 +41,17 @@ public class TAdminUserController {
     @RequestMapping("/buyPlist")
     public ResponseUtils buyPlist(@RequestBody OrderListVo orderList, HttpServletRequest request,HttpServletResponse response){
         try {
-
+            String name = null;
             //获取Cookie对象
             Cookie[] cookies = request.getCookies();
             //获取Cookie中的数据
-            Cookie cookie = cookies[0];
-            String value = cookie.getValue();
-            orderList.setName(value);
+            for (int i = 0; i < cookies.length; i++) {
+                if (cookies[i].getName().equals("name")) {
+                    name = cookies[i].getValue();
+                    break;
+                }
+            }
+            orderList.setName(name);
         //      根据保险名查询保险id
             ProductList productList = tAdminUserMapper.selectNameById(orderList.getOrder_name());
 //            将查询到的赋值
