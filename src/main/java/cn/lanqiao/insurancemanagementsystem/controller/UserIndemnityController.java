@@ -1,6 +1,5 @@
 package cn.lanqiao.insurancemanagementsystem.controller;
 
-
 import cn.lanqiao.insurancemanagementsystem.model.pojo.OrderList;
 import cn.lanqiao.insurancemanagementsystem.service.impl.UserIndemnityServiceImpl;
 import cn.lanqiao.insurancemanagementsystem.utils.ResponseUtils;
@@ -11,24 +10,30 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/userIndemnity")
 public class UserIndemnityController {
-    //个人申请赔偿列表111
+    //用户个人申请赔偿列表
+    //依赖注入
     @Autowired
     UserIndemnityServiceImpl userIndemnityService;
-    @RequestMapping("/getList")
+    @RequestMapping("/getList")//映射
     public ResponseUtils getUserOrderList(HttpServletRequest request) {
         try {
+//            获取请求中的所有 cookies
             Cookie[] cookies = request.getCookies();
             if (cookies == null) {
                 return new ResponseUtils(401, "请先登录");
             }
+//            在 cookies 数组中查找名为 "name" 的 cookie，并将其值（即用户名）赋给 name 变量。
+//            如果没有该 cookie，意味着用户没有登录，因此返回一个提示信息
             String name = null;
+//            if (cookies != null && cookies.length == 1 && "name".equals(cookies[0].getName())) {
+//                name = cookies[0].getValue();
+//            }
             for (Cookie cookie : cookies) {
                 if ("name".equals(cookie.getName())) {
                     name = cookie.getValue();

@@ -5,12 +5,11 @@ import cn.lanqiao.insurancemanagementsystem.model.pojo.OrderList;
 import cn.lanqiao.insurancemanagementsystem.service.UserOrderListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class UserOrderListServiceImpl implements UserOrderListService {
-    //   查询用户个人订单列表111
+    //   查询用户个人订单列表
     /**
      * @return
      */
@@ -19,34 +18,11 @@ public class UserOrderListServiceImpl implements UserOrderListService {
     @Override
     public List<OrderList> getOrderList(String username) {
         try {
-            // 直接使用用户名查询订单  111
+            // 直接使用用户名查询订单
             return userOrderListMapper.getOrderList(username);
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
     }
-//状态
-//    @Override
-//    public boolean confirmPayment(String orderId, String productId) {
-//        try {
-//            int result = userOrderListMapper.updateOrderState(orderId, productId, "1");
-//            return result > 0;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
-//操作
-//    @Override
-//    public boolean cancelOrder(String orderId, String productId) {
-//        try {
-//            int result = userOrderListMapper.deleteOrder(orderId, productId);
-//            return result > 0;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
 }
 
