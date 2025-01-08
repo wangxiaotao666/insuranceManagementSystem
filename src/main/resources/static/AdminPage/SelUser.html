@@ -1,95 +1,158 @@
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-  <head>
-<!--    <base href="<%=basePath%>">-->
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title></title>
-    
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>修改用户信息</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	
+	<meta http-equiv="expires" content="0">
+
+	<!-- 引入样式和脚本 -->
 	<link rel="stylesheet" type="text/css" href="/Styles/admin-all.css" />
-    <link rel="stylesheet" type="text/css" href="/Styles/base.css"/>
-    <script type="text/javascript" src="/Scripts/jquery-1.7.2.js"></script>
-    <script type="text/javascript" src="/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
-    <link rel="stylesheet" type="text/css" href="/Styles/formui.css"/>
-    <script type="text/javascript" src="/Scripts/tb.js"></script>
-    <script type="text/javascript" src="/laydate/laydate.js"></script>
+	<link rel="stylesheet" type="text/css" href="/Styles/base.css"/>
+	<link rel="stylesheet" type="text/css" href="/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
+	<link rel="stylesheet" type="text/css" href="/Styles/formui.css"/>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<style>
+		.readonly-text {
+			border: none;
+			background-color: transparent;
+			outline: none;
+			cursor: default;
+		}
+		.alert-success, .alert-danger {
+			display: none;
+			margin-top: 10px;
+		}
+	</style>
+</head>
+<body>
+<div class="alert alert-info" style="width:100%;">当前位置<b class="tip"></b>修改用户信息</div>
+<form id="updateUserForm" name="myForm">
+	<table class="tb" id="list">
+		<thead>
+		<tr>
+			<th>帐号</th>
+			<th>密码</th>
+			<th>姓名</th>
+			<th>性别</th>
+			<th>年龄</th>
+			<th>电话</th>
+			<th>联系地址</th>
+			<th>操作</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr class="demo">
+			<td><input type="text" id="username" name="user_list.username" class="readonly-text" readonly /></td>
+			<td><input type="password" id="password" name="user_list.password" /></td>
+			<td><input type="text" id="name" name="user_list.name" /></td>
+			<td>
+				<select id="sex" name="user_list.sex">
+					<option value="男">男</option>
+					<option value="女">女</option>
+				</select>
+			</td>
+			<td><input id="age" name="user_list.age" type="number" min="0" max="150" /></td>
+			<td><input id="phone" name="user_list.phone" type="tel" pattern="[0-9]{10}" /></td>
+			<td><input id="address" name="user_list.address" type="text" /></td>
+			<td>
+				<input type="hidden" id="userId" name="user_list.user_id" />
+				<input type="hidden" name="user_list.type" />
+				<button id="audit" type="button" class="btn btn-mini btn-danger">确认</button>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</form>
+<div id="message" class="alert alert-success">更新成功</div>
+<div id="errorMessage" class="alert alert-danger">更新失败，请检查输入。</div>
+
+<script src="../js/axios.min.js"></script>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		// 获取确认按钮元素
+		const auditButton = document.getElementById('audit');
 
 
-  </head>
 
-  <body>
-    <div class="alert alert-info" style="width:100%;">当前位置<b class="tip"></b>修改用户信息</div>
-    <form action="UpdateUser" method="post" name="myForm">
-    <table class="tb" id="list">
-        <tbody>
-            <tr>
-                <th>帐号</th>
-                <th>密码</th>
-                <th>姓名</th>
-                <th>性别</th>
-                <th>年龄</th>
-                <th>电话</th>
-                <th>联系地址</th>
-                <th>操作</th>
-            </tr>
-           		<tr class="demo">	
-           		<td>
-        
-           			<input type="hidden" id="updd" name="userlist.username" value=""/>
-           		</td>
-           		<td>
-           			<input type="text" id="up" name="userlist.password" value=""/>
-               	</td>
-           		<td>
-           			<input type="text" id="ua" name="userlist.name" value=""/>
-               	</td>
-               	<td>
-              		<select name="userlist.sex">
-              		
-              			<option value="男" selected="selected">男</option>
-              			<option value="女">女</option>
-           
-              		</select>
-               	</td>
-               	<td>
-              		<input name="userlist.age" type="text" value="" />
-               	</td>
-               	<td>
-              		<input name="userlist.phone" type="text" value="" />
-               	</td>
-               	<td>
-              		<input name="userlist.address" type="text" value=""/>
-               	</td>
-               	<td>
-               		<input type="hidden" name="userlist.user_id" value="">
-               		<input type="hidden" name="userlist.type" value="">
-               		<input id="audit" type="submit" class="btn btn-mini btn-danger" value="确认"/>
-               	</td>
-               	</tr>
-        </tbody>
-    </table>
-    </form>
-  </body>
-  <script language="javascript">
-	$(function(){
-		$("#audit").click(function(){
-			if($("#up").val() =="" ||$("#up").val() ==null){
-				alert("请填写密码！")
-				return false
-			} else if($("#ua").val() =="" ||$("#ua").val() ==null){
-				alert("请填写姓名！")
-				return false
-			} else{
-				alert("修改成功！")
-			}
-	    })
-	})
-	</script>
+
+		axios({
+			url: "http://localhost:8080/UserListController/selectUser",
+			method: 'get',
+		})
+				.then(function (response) {
+					console.log('Users data received:', response.data); // 打印从服务器接收到的数据
+
+					const userData = response.data.data[0]; // 获取数组中的第一个用户对象
+					if (userData) {
+						document.getElementById('username').value = userData.username || '';
+						document.getElementById('password').value = userData.password || ''; // 不填充密码
+						document.getElementById('name').value = userData.name || '';
+
+						// 注意 sex 字段应该匹配 select 的 value 属性
+						document.querySelector('#sex option[value="' + (userData.sex || '') + '"]').selected = true;
+
+						document.getElementById('age').value = parseInt(userData.age, 10) || ''; // 转换为整数
+						document.getElementById('phone').value = userData.phone || '';
+						document.getElementById('address').value = userData.address || '';
+						document.getElementById('userId').value = userData.user_id || '';
+					}
+				})
+				.catch(function (error) {
+					console.error('Error fetching user data:', error);
+				});
+
+		// 定义 updateUser 函数并在 DOMContentLoaded 后绑定到按钮上
+		function updateUser(event) {
+			event.preventDefault(); // 阻止默认行为
+
+			// 发送 POST 请求更新用户信息
+			axios({
+				url: "http://localhost:8080/UserListController/updateUserList", // 确保这个URL指向正确的API端点
+				method: 'post', // 使用 POST 方法来更新资源
+				data: {
+					username: document.getElementById('username').value,
+					password: document.getElementById('password').value,
+					name: document.getElementById('name').value,
+					sex: document.getElementById('sex').value,
+					age: parseInt(document.getElementById('age').value, 10),
+					phone: document.getElementById('phone').value,
+					address: document.getElementById('address').value,
+					user_id: document.getElementById('userId').value,
+
+				} // 发送表单数据
+			})
+					.then((response) => {
+						// 正确地进行条件判断
+						if (response.data.code == '200') {
+							// 显示成功消息并隐藏错误消息
+							document.getElementById('message').style.display = 'block';
+							document.getElementById('errorMessage').style.display = 'none';
+							alert("修改成功");
+							location.href = "http://localhost:8080/AdminPage/SelUserList.html"
+						} else {
+							// 显示错误消息并隐藏成功消息
+							document.getElementById('message').style.display = 'none';
+							document.getElementById('errorMessage').style.display = 'block';
+							alert("修改失败");
+						}
+					})
+					.catch(function (error) {
+						console.error('Error updating user:', error);
+
+						// 显示错误消息并隐藏成功消息
+						document.getElementById('message').style.display = 'none';
+						document.getElementById('errorMessage').style.display = 'block';
+						alert("更新过程中发生错误，请稍后再试。");
+					});
+		}
+
+		// 绑定点击事件到按钮上
+		auditButton.addEventListener('click', updateUser);
+	});
+</script>
+</body>
 </html>

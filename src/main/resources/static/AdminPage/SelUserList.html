@@ -1,77 +1,151 @@
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-  <head>
-<!--    <base href="<%=basePath%>">-->
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title></title>
-    
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>用户列表</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="expires" content="0">
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	
+
 	<link rel="stylesheet" type="text/css" href="/Styles/admin-all.css" />
-    <link rel="stylesheet" type="text/css" href="/Styles/base.css"/>
-    <script type="text/javascript" src="/Scripts/jquery-1.7.2.js"></script>
-    <script type="text/javascript" src="/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
-    <link rel="stylesheet" type="text/css" href="/Styles/formui.css"/>
-    <script type="text/javascript" src="/Scripts/tb.js"></script>
-    <script type="text/javascript" src="/laydate/laydate.js"></script>
-	
-<!--	<link rel="stylesheet" type="text/css" href="styles.css">-->
-	<link rel="stylesheet" type="text/css" href="/Styles/ui-all/">
+	<link rel="stylesheet" type="text/css" href="/Styles/base.css"/>
+	<script type="text/javascript" src="/Scripts/jquery-1.7.2.js"></script>
+	<script type="text/javascript" src="/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
+	<link rel="stylesheet" type="text/css" href="/Styles/formui.css"/>
+	<script type="text/javascript" src="/Scripts/tb.js"></script>
+	<script type="text/javascript" src="/laydate/laydate.js"></script>
 
-	
-	
-  </head>
+	<!-- 引入外部JavaScript文件 -->
+	<script src="../js/axios.min.js"></script>
+</head>
+<body>
+<div class="alert alert-info" style="width:100%;">当前位置<b class="tip"></b>用户列表</div>
+<table id="userTable" class="tb" border="1">
+	<thead>
+	<tr>
+		<th>帐号</th>
+		<th>姓名</th>
+		<th>性别</th>
+		<th>年龄</th>
+		<th>电话</th>
+		<th>联系地址</th>
+		<th>操作</th>
+	</tr>
+	</thead>
+	<tbody></tbody>
+</table>
 
-  <body>
-    <div class="alert alert-info" style="width:100%;">当前位置<b class="tip"></b>用户列表</div>
-    <table class="tb" id="list">
-        <tbody>
-            <tr>
-                <th>帐号</th>
-                <th>姓名</th>
-                <th>性别</th>
-                <th>年龄</th>
-                <th>电话</th>
-                <th>联系地址</th>
-                <th>操作</th>
-            </tr>
-            	<!-- <%if(ulist != null){
-            		if(!ulist.isEmpty()){
-            			for(UserList ul : ulist){ %> -->
-            		<tr class="demo">	
-            		<td>
-            			<!-- <%=ul.getUsername() %> -->
-            		</td>
-            		<td>
-               			<!-- <%=ul.getName() %> -->
-                	</td>
-                	<td>
-               			<!-- <%=ul.getSex() %> -->
-                	</td>
-                	<td>
-               			<!-- <%=ul.getAge() %> -->
-                	</td>
-                	<td>
-               			<!-- <%=ul.getPhone() %> -->
-                	</td>
-                	<td>
-               			<!-- <%=ul.getAddress() %> -->
-                	</td>
-                	<td>
-						<!-- SelUser!selUser?uid=<%=ul.getUser_id() %> -->
-						<!-- DelUser!delUser?uid=<%=ul.getUser_id() %> -->
-                		<a href="/AdminPage/SelUser.html" class="btn btn-mini btn-danger" >修改</a>/
-                		<a href="DelUser!delUser?uid=<%=ul.getUser_id() %>" class="btn btn-mini btn-danger" >删除</a>
-                	</td>
-                	</tr>
-        
-        </tbody>
-    </table>
-  </body>
+<script type="text/javascript">
+	loadUsers(); // 页面加载时自动加载用户列表
+	function loadUsers() {
+		axios.get('http://localhost:8080/UserListController/selectUserList')
+				.then(function (response) {
+					console.log('Response data:', response.data); // 打印响应数据到控制台
+
+					const tableBody = document.querySelector('#userTable tbody');
+					if (!tableBody) {
+						console.error('Could not find table body element.');
+						return;
+					}
+
+					tableBody.innerHTML = ''; // 清空现有表格行
+
+					if (response.data && response.data.data && Array.isArray(response.data.data)) {
+						response.data.data.forEach(user => {
+							const row = `
+                            <tr>
+                                <td>${user.username || 'N/A'}</td>
+                                <td>${user.name || 'N/A'}</td>
+                                <td>${user.sex || 'N/A'}</td>
+                                <td>${user.age || 'N/A'}</td>
+                                <td>${user.phone || 'N/A'}</td>
+                                <td>${user.address || 'N/A'}</td>
+                                <td>
+                                   <a href="#" onclick = "upBtn(${user.user_id})" id = "IDbtn" class="btn btn-mini btn-danger">修改</a>
+                                    <a href="#" onclick="softDeleteUser(${user.user_id})" class="btn btn-mini btn-danger">删除</a>
+                                </td>
+                            </tr>
+                        `;
+							console.log('Appending row:', row); // 调试信息
+							tableBody.insertAdjacentHTML('beforeend', row);
+						});
+					} else {
+						console.error('Unexpected response format:', response.data);
+					}
+				})
+				.catch(function (error) {
+					console.error('Error fetching user data:', error);
+					if (error.response) {
+						// 请求已发出，但服务器响应的状态码不在2xx范围内
+						console.error('Server responded with status:', error.response.status);
+						console.error('Response data:', error.response.data);
+					} else if (error.request) {
+						// 请求已经发送但没有收到响应
+						console.error('No response received:', error.request);
+					} else {
+						// 其他错误发生，如设置请求时出现问题
+						console.error('Error setting up request:', error.message);
+					}
+				});
+
+	}
+	function upBtn(user_id) {
+		console.log(user_id)
+		if (confirm('确定修改？')) {
+			axios.post(`http://localhost:8080/UserListController/findID`, {
+				user_id: user_id
+			}).then(()=>{
+				location.href="SelUser.html"
+			})
+		}
+	}
+	// 软删除用户
+	function softDeleteUser(user_id) {
+		console.log(user_id)
+		if (confirm('确定删除？')) {
+			axios.post(`http://localhost:8080/UserListController/deleteUserList`, {
+				user_id: user_id
+			}).then(function (response) {
+				console.log('User soft deleted successfully:', response.data);
+
+				if (response.data.code === 200) {
+					alert('删除成功！');
+					location.reload(); // 刷新页面
+				} else {
+					alert('删除失败，请重试！');
+				}
+			})
+					.catch(function (error) {
+						console.error('Error soft deleting user:', error);
+						alert('删除失败，请重试！');
+					});
+		}
+	}
+
+	// 	const productTableBody = document.getElementById('IDbtn');
+	// 	productTableBody.addEventListener('click', function(event) {
+	// 		if (event.target && event.target.classList.contains('IDbtn')) {
+	// 			// 获取存在按钮中的id数据
+	// 			let product_id = event.target.getAttribute('IDbtn');
+	// 			// 发送请求到服务器删除用户
+	// 			axios({
+	// 				url: "http://localhost:8080/UserListController/selectUser",
+	// 				method: "post",
+	// 				data: {
+	// 					product_id : product_id
+	// 				}
+	// 			}).then((response) => {  // 定义 response 参数
+	// 				alert(product_id)
+	// 			}).catch((error) => {  // 添加错误处理
+	// 				console.error("错误，请练习管理员!", error);
+	// 				alert("请求过程中出现错误，请稍后再试或联系管理员");
+	// 			});
+	// 		}
+	// 	});
+
+</script>
+</body>
 </html>
