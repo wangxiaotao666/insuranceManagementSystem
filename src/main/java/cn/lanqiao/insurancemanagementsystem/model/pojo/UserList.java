@@ -17,8 +17,9 @@ public class UserList {
   private String phone;
   private String address;
   private String type;
+  private Integer is_delete;
 
+//  public UserList(String username, String name, String age, String phone, String address) {
+//  }
 
-  public UserList(String username, String name, String age, String phone, String address) {
-  }
 }
